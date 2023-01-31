@@ -7,8 +7,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@ant-design/react-native": "^5.0.3",
+    "@apollo/client": "^3.7.5",
+    "axios": "^1.2.6",
     "expo": "~47.0.12",
     "expo-status-bar": "~1.4.2",
+    "graphql": "^16.6.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
