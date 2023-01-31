@@ -3,7 +3,8 @@ import { AppResolver } from './app.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './modules/auth/auth.module';
+import AuthModule from './auth/auth.module';
+import UsersDbModule from './db/users/users.db.module';
 
 @Module({
   imports: [
@@ -14,8 +15,8 @@ import { AuthModule } from './modules/auth/auth.module';
       sortSchema: true,
     }),
     AuthModule,
+    UsersDbModule,
   ],
-  controllers: [],
   providers: [AppResolver],
 })
 export class AppModule {}

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import constants from './constants/auth.constants';
 import { GraphQLError } from 'graphql/error';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export default class AuthService {
@@ -11,18 +11,7 @@ export default class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
-  
-  public login(payload) {
-    const existedUser = payload;
-    if (existedUser.email === 'email') {
-      const tokens = this.generateTokens(payload);
-      return tokens;
-    }
-    if (!existedUser) {
-      throw new GraphQLError('Invalid Credentials');
-    }
-  }
-  
+
   private generateTokens(payload) {
     return {
       accessToken: this.jwtService.sign(payload, {
@@ -34,5 +23,16 @@ export default class AuthService {
         expiresIn: constants.REFRESH_TOKEN_TIMEOUT,
       }),
     };
+  }
+  
+  public login(payload) {
+    const existedUser = payload;
+    if (existedUser.email === 'email@com') {
+      const tokens = this.generateTokens(payload);
+      return tokens;
+    }
+    if (existedUser.email !== 'email') {
+      throw new GraphQLError('Invalid Credentials');
+    }
   }
 }

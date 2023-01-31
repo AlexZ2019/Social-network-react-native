@@ -8,7 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
-        type: config.get<string>('TYPEORM_CONNECTION'),
+        type: config.get<string>('TYPEORM_CONNECTION') as 'postgres',
         host: config.get<string>('TYPEORM_HOST'),
         username: config.get<string>('TYPEORM_USERNAME'),
         password: config.get<string>('TYPEORM_PASSWORD'),
