@@ -22,4 +22,4 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
 })
-export default class UsersDbModule {}
+export default class DbModule {}
