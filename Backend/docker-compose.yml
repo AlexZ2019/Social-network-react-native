@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=${TYPEORM_PASSWORD}
       - POSTGRES_DB=${TYPEORM_DATABASE}
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/pgdata/data
     ports:
       - ${TYPEORM_PORT}:${TYPEORM_PORT}
 #  backend:
