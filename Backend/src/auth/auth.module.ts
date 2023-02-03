@@ -7,16 +7,19 @@ import AuthResolver from './auth.resolver';
 import AuthService from './auth.service';
 import AccessTokenStrategy from './strategies/accessToken.strategy';
 import RefreshTokenStrategy from './strategies/refreshToken.strategy';
+import UserService from '../user/user.service';
+import User from '../user/entity/user.entity';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
-    TypeOrmModule.forFeature([Token]),
+    TypeOrmModule.forFeature([Token, User]),
   ],
   providers: [
     AuthResolver,
     AuthService,
+    UserService,
     AccessTokenStrategy,
     RefreshTokenStrategy,
   ],

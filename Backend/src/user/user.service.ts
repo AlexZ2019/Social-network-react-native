@@ -9,6 +9,15 @@ class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
   
+  async getUserByEmailWithPassword(email: string) {
+    return this.userRepository.findOneBy({ email });
+  }
+  
+  async getUserByEmail(email: string) {
+    const user = await this.userRepository.findOneBy({ email });
+    const { password, ...restUser } = user;
+    return restUser;
+  }
 }
 
 export default UserService;
