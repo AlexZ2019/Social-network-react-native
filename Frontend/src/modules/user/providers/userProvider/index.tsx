@@ -9,7 +9,7 @@ const UserProvider = (): FC<ReactNode> => {
   const [fetchUser, { loading }] = useLazyQuery(USER_QUERY, {
     context: {
       headers: {
-        authorization: `Bearer ${accessToken}`,
+        authorization: `Bearer ${accessToken}`, // TODO: remove headers from this place
       },
     },
   });
