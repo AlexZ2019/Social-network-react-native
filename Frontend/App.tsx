@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { client } from './src/providers/apollo/config';
+import { client } from './src/modules/apollo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font';
@@ -17,11 +17,13 @@ export default function App() {
   }
   return (
     <ApolloProvider client={client}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={LoginPage}/>
-        </Stack.Navigator>
-      </NavigationContainer>
+      <UserProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Login" component={LoginPage}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserProvider>
     </ApolloProvider>
   );
 }

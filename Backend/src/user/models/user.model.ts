@@ -7,6 +7,9 @@ class UserModel {
   
   @Field()
   email: string;
+  
+  @Field()
+  nickname: string;
 }
 
 export default UserModel;
