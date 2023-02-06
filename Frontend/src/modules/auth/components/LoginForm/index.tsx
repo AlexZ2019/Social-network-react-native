@@ -9,7 +9,7 @@ let schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-const LoginForm = () => {
+const Index = () => {
   const {
     control,
     handleSubmit,
@@ -51,4 +51,4 @@ const LoginForm = () => {
   </View>;
 };
 
-export default LoginForm;
+export default Index;

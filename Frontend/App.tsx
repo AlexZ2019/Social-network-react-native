@@ -2,8 +2,8 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from './src/providers/apollo/config';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginForm from './src/modules/auth/components/LoginForm';
 import { useFonts } from 'expo-font';
+import LoginPage from './src/modules/auth/pages/LoginPage';
 
 const Stack = createStackNavigator();
 
@@ -19,7 +19,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Login" component={LoginForm}/>
+          <Stack.Screen name="Login" component={LoginPage}/>
         </Stack.Navigator>
       </NavigationContainer>
     </ApolloProvider>
