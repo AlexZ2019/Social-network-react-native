@@ -12,7 +12,7 @@ export default function App() {
     antoutline: require('@ant-design/icons-react-native/fonts/antoutline.ttf'),
     antfill: require('@ant-design/icons-react-native/fonts/antoutline.ttf'),
   });
-  if (!loaded) {
+  if (!isLoaded) {
     return null;
   }
   return (
