@@ -1,24 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './src/providers/apollo/config';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginForm from './src/modules/auth/components/LoginForm';
+import { useFonts } from 'expo-font';
+
+const Stack = createStackNavigator();
 
 export default function App() {
+  const [isLoaded] = useFonts({
+    antoutline: require('@ant-design/icons-react-native/fonts/antoutline.ttf'),
+    antfill: require('@ant-design/icons-react-native/fonts/antoutline.ttf'),
+  });
+  if (!loaded) {
+    return null;
+  }
   return (
     <ApolloProvider client={client}>
-      <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
-        <StatusBar style="auto"/>
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={LoginForm}/>
+        </Stack.Navigator>
+      </NavigationContainer>
     </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
