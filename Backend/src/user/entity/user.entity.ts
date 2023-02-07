@@ -13,4 +13,13 @@ export default class User {
   
   @Column()
   password: string;
+  
+  @Column()
+  biography: string;
+  
+  @Column()
+  birthday: string;
+  
+  @Column()
+  status: string;
 }

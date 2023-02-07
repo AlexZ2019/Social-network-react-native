@@ -10,6 +10,15 @@ class UserModel {
   
   @Field()
   nickname: string;
+  
+  @Field()
+  birthday: string;
+  
+  @Field()
+  status: string;
+  
+  @Field()
+  biography: string;
 }
 
 export default UserModel;
