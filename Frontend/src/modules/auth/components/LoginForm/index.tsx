@@ -9,21 +9,16 @@ let schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-const Index = () => {
+const LoginForm = ({ handleSubmit }: {
+  handleSubmit: (
+    email: string, password: string) => void
+}) => {
   const {
     control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    getValues,
   } = useForm<InputItem>({
     mode: 'onTouched',
     resolver: yupResolver(schema),
   });
-  
-  const onSubmit = () => {
-  
-  };
   
   return <View>
     <Controller
@@ -47,8 +42,8 @@ const Index = () => {
         placeholder="password">
       </InputItem>}
     />
-    <Button onPress={onSubmit} type="primary">Login</Button>
+    <Button onPress={handleSubmit} type="primary">Login</Button>
   </View>;
 };
 
-export default Index;
+export default LoginForm;
