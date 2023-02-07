@@ -1,3 +1,3 @@
 export const mergeArrays = (...args: any[][]) => {
-  return [...args].reduce((arr, resultArray) => [...resultArray, arr], []);
+  return [...args].reduce((arr, resultArray) => [...resultArray, ...arr], []);
 };
