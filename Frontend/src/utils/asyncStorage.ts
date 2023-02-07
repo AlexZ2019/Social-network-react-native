@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const setAsyncStorageValue = async (key: string, value: string) => {
-  await AsyncStorage.setItem.setItem(key, value);
+  await AsyncStorage.setItem(key, value);
 };
 
 export const getAsyncStorageValue = (key: string) => {
@@ -13,6 +13,6 @@ export const removeAsyncStorageValue = (key: string) => {
 };
 
 export const setTokensToAsyncStorage = async (tokens: { accessToken: string; refreshToken: string }) => {
-  await setAsyncStorageValue.setItem('accessToken', tokens.accessToken);
-  await setAsyncStorageValue.setItem('refreshToken', tokens.refreshToken);
+  await setAsyncStorageValue('accessToken', tokens.accessToken);
+  await setAsyncStorageValue('refreshToken', tokens.refreshToken);
 };
