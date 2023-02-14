@@ -6,5 +6,5 @@ export const routes = [
   {
     path: constants.login,
     page: <LoginPage/>,
-    type: RouteType.NotxAuth,
+    type: RouteType.NotAuth,
   }];

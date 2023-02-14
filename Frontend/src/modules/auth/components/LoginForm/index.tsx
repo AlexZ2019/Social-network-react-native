@@ -9,12 +9,13 @@ let schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-const LoginForm = ({ handleSubmit }: {
-  handleSubmit: (
+const LoginForm = ({ onSubmit }: {
+  onSubmit: (
     email: string, password: string) => void
 }) => {
   const {
     control,
+    handleSubmit,
   } = useForm<InputItem>({
     mode: 'onTouched',
     resolver: yupResolver(schema),
@@ -42,7 +43,7 @@ const LoginForm = ({ handleSubmit }: {
         placeholder="password">
       </InputItem>}
     />
-    <Button onPress={handleSubmit} type="primary">Login</Button>
+    <Button onPress={handleSubmit(onSubmit)} type="primary">Login</Button>
   </View>;
 };
 

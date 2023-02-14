@@ -1,11 +1,19 @@
-import { FC, ReactNode, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAsyncStorageValue } from '../../../../utils/asyncStorage';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { useLazyQuery } from '@apollo/client';
 import { USER_QUERY } from '../../graphql/queries/user';
+import * as React from 'react';
 
-const UserProvider = (): FC<ReactNode> => {
-  const accessToken = getAsyncStorageValue('accessToken');
+const UserProvider = ({ children }: { children: any }) => {
+  const [accessToken, setAccessToken] = useState<null | string>(null);
+  useEffect(() => {
+    (async () => {
+      const accessToken = await getAsyncStorageValue('accessToken');
+      setAccessToken(accessToken);
+    })();
+  }, []);
+  
   const [fetchUser, { loading }] = useLazyQuery(USER_QUERY, {
     context: {
       headers: {
@@ -15,11 +23,9 @@ const UserProvider = (): FC<ReactNode> => {
   });
   
   useEffect(() => {
-    (async () => {
-      if (accessToken) {
-        await fetchUser();
-      }
-    })();
+    if (accessToken) {
+      fetchUser();
+    }
   }, [accessToken]);
   
   if (loading) {

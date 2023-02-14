@@ -1,5 +1,5 @@
 import LoginForm from '../../components/LoginForm';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import {
   getAsyncStorageValue,
   setTokensToAsyncStorage,
@@ -19,12 +19,12 @@ const LoginPage = () => {
   });
   
   const [fetchUser] = useLazyQuery(USER_QUERY);
-  const handleSubmit = async (data) => {
+  const onSubmit = async (data) => {
     await login({ variables: data });
     const accessToken = await getAsyncStorageValue('accessToken');
     if (accessToken) {
       await fetchUser(); //TODO: need to save a user to apollo cache
-      navigate(RoutePaths.main);
+      // navigate('/');
     }
   };
   
@@ -32,7 +32,7 @@ const LoginPage = () => {
     <View>
       <Text>Welcome!</Text>
       <Text>Please, sign in</Text>
-      <LoginForm handleSubmit={handleSubmit}/>
+      <LoginForm onSubmit={onSubmit}/>
     </View>
   );
 };

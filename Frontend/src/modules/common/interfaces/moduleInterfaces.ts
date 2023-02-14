@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 export enum RouteType {
   Auth = 'Auth',
   Public = 'Public',
@@ -5,7 +7,7 @@ export enum RouteType {
 }
 
 export interface IRoute {
-  page: FC<ReactNode>;
+  page: FC;
   path: string;
   type: RouteType;
 }
