@@ -22,6 +22,7 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     await login({ variables: data });
     const accessToken = await getAsyncStorageValue('accessToken');
+    console.log('accessToken', accessToken);
     if (accessToken) {
       await fetchUser(); //TODO: need to save a user to apollo cache
       // navigate('/');
