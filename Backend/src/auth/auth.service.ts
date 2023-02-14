@@ -42,16 +42,12 @@ export default class AuthService {
         user.password,
         existedUser.password,
       );
-      console.log('matchedPassword', matchedPassword);
-      console.log('user.password', user.password);
-      console.log('existedUser.password', existedUser.password);
       if (matchedPassword) {
         const payload = {
           email: existedUser.email,
           id: existedUser.id,
         };
         const tokens = this.generateTokens(payload);
-        console.log('tokens', tokens);
         await this.tokenRepository.save({ userId: existedUser.id, ...tokens });
         return tokens;
       }

@@ -21,7 +21,6 @@ const UserProvider = ({ children }: { children: any }) => {
       },
     },
   });
-  
   useEffect(() => {
     if (accessToken) {
       fetchUser();
