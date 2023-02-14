@@ -14,7 +14,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: config.get<string>('TYPEORM_PASSWORD'),
         database: config.get<string>('TYPEORM_DATABASE'),
         port: config.get<number>('TYPEORM_PORT'),
-        entities: [`${__dirname}src/**/*.entity.ts`],
+        entities: [__dirname + '/../**/**/*.entity.js'],
         synchronize: false,
         autoLoadEntities: true,
         logging: true,

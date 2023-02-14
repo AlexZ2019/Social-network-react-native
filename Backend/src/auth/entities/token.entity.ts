@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import BaseEntity from '../../common/entity/base.entity';
 
 @Entity()
-export class Token {
-  @PrimaryGeneratedColumn()
+export default class Token extends BaseEntity {
+  @Column()
   userId: number;
   
   @Column()

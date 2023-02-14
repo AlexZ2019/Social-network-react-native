@@ -5,11 +5,10 @@ import { GraphQLError } from 'graphql/error';
 import { ConfigService } from '@nestjs/config';
 import UserService from '../user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Token } from './entities/token.entity';
 import { Repository } from 'typeorm';
 import comparePassword from './utils/comparePassword';
 import AuthArgs from './dto/dto/inputs.dto';
-import { Context } from '@nestjs/graphql';
+import Token from './entities/token.entity';
 
 @Injectable()
 export default class AuthService {
@@ -43,12 +42,16 @@ export default class AuthService {
         user.password,
         existedUser.password,
       );
+      console.log('matchedPassword', matchedPassword);
+      console.log('user.password', user.password);
+      console.log('existedUser.password', existedUser.password);
       if (matchedPassword) {
         const payload = {
           email: existedUser.email,
           id: existedUser.id,
         };
         const tokens = this.generateTokens(payload);
+        console.log('tokens', tokens);
         await this.tokenRepository.save({ userId: existedUser.id, ...tokens });
         return tokens;
       }
