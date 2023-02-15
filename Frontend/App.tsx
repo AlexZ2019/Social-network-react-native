@@ -16,7 +16,6 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from './src/modules/apollo';
 import constants from './src/modules/News/constants';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 
 
