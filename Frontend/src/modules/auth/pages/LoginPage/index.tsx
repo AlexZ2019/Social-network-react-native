@@ -9,7 +9,7 @@ import { LOGIN_MUTATION } from '../../../graphql/mutations/login';
 import { USER_QUERY } from '../../../user/graphql/queries/user';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import constants from '../../../News/constants';
+import { ILogin } from '../../types';
 
 const LoginPage = () => {
   //TODO: add locales
@@ -22,11 +22,12 @@ const LoginPage = () => {
   });
   
   const [fetchUser] = useLazyQuery(USER_QUERY);
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ILogin): Promise<void> => {
     await login({ variables: data });
     const accessToken = await getAsyncStorageValue('accessToken');
     if (accessToken) {
       await fetchUser(); //TODO: need to save a user to apollo cache
+      navigation.navigate('News');
     }
   };
   

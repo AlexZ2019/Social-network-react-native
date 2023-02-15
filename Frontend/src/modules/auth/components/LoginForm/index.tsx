@@ -1,8 +1,9 @@
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { InputItem, Button } from '@ant-design/react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ILogin } from '../../types';
 
 let schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -10,8 +11,7 @@ let schema = yup.object().shape({
 });
 
 const LoginForm = ({ onSubmit }: {
-  onSubmit: (
-    email: string, password: string) => void
+  onSubmit: (data: ILogin) => Promise<void>
 }) => {
   const {
     control,

@@ -8,17 +8,14 @@ import { client } from '../../../apollo';
 const NotAuthRouteWrapper = ({ children }: { children: JSX.Element }) => {
   //TODO: add props type
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const user = client.readQuery({
-    query: USER_QUERY,
-  });
   const { data } = useQuery(USER_QUERY);
   useEffect(() => {
-    if (data || user) {
+    if (data) {
       navigation.navigate('News');
     }
-  }, [data, user]);
+  }, [data]);
   
-  if (data || user) {
+  if (data) {
     return null;
   }
   
