@@ -7,10 +7,13 @@ import {
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LOGIN_MUTATION } from '../../../graphql/mutations/login';
 import { USER_QUERY } from '../../../user/graphql/queries/user';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import constants from '../../../News/constants';
 
 const LoginPage = () => {
   //TODO: add locales
-  
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [login] = useMutation(LOGIN_MUTATION, {
     onCompleted: (data: { login: { accessToken: string; refreshToken: string } }) => {
       const tokens = data.login;

@@ -13,6 +13,7 @@ import NotAuthRouteWrapper
   from './src/modules/auth/components/RouteWrappers/NotAuthRouteWrapper';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './src/modules/apollo';
+import constants from './src/modules/News/constants';
 
 const Stack = createStackNavigator();
 
@@ -28,12 +29,13 @@ export default function App() {
     <ApolloProvider client={client}>
       <UserProvider>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName={constants.news}>
             {modules.routes.map((route: IRoute, index) => {
               switch (route.type) {
                 case RouteType.NotAuth:
                   return (
                     <Stack.Screen key={index} name={route.path}
+                                  options={{ headerShown: false }}
                                   children={() => (
                                     <NotAuthRouteWrapper>{route.page}</NotAuthRouteWrapper>
                                   )}/>
@@ -47,7 +49,7 @@ export default function App() {
                   );
                 default:
                   return <Stack.Screen key={index} name={route.path}
-                                       component={route.page}/>;
+                                       children={() => route.page}/>;
               }
             })}
           </Stack.Navigator>

@@ -42,6 +42,7 @@ export default class AuthService {
         user.password,
         existedUser.password,
       );
+      // TODO: check if comparePassword works ^^
       if (matchedPassword) {
         const payload = {
           email: existedUser.email,
