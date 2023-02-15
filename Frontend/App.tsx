@@ -18,7 +18,6 @@ import constants from './src/modules/News/constants';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StatusBar } from 'react-native';
 
-
 const Drawer = createDrawerNavigator();
 
 export default function App() {
@@ -54,8 +53,8 @@ export default function App() {
                                   )}/>
                   );
                 default:
-                  return <Stack.Screen key={index} name={route.path}
-                                       children={() => route.page}/>;
+                  return <Drawer.Screen key={index} name={route.path}
+                                        children={() => route.page}/>;
               }
             })}
           </Drawer.Navigator>
