@@ -6,6 +6,9 @@ export const USER_QUERY = gql`
             id
             email
             nickname
+            birthday
+            biography
+            status
         }
     }
 `;

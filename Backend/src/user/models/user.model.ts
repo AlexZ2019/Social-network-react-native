@@ -11,14 +11,14 @@ class UserModel {
   @Field()
   nickname: string;
   
-  @Field()
-  birthday: string;
+  @Field({ nullable: true })
+  birthday: string | null;
   
-  @Field()
-  status: string;
+  @Field({ nullable: true })
+  status: string | null;
   
-  @Field()
-  biography: string;
+  @Field({ nullable: true })
+  biography: string | null;
 }
 
 export default UserModel;
