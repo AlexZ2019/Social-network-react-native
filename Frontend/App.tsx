@@ -40,10 +40,13 @@ export default function App() {
                 case RouteType.NotAuth:
                   return (
                     <Drawer.Screen key={index} name={route.path}
-                                   options={{headerShown: false, hidden: true, drawerItemStyle: { display: 'none' }}}
-                                  children={() => (
-                                    <NotAuthRouteWrapper>{route.page}</NotAuthRouteWrapper>
-                                  )}/>
+                                   options={{
+                                     headerShown: false,
+                                     drawerItemStyle: { display: 'none' },
+                                   }}
+                                   children={() => (
+                                     <NotAuthRouteWrapper>{route.page}</NotAuthRouteWrapper>
+                                   )}/>
                   );
                 case RouteType.Auth:
                   return (
