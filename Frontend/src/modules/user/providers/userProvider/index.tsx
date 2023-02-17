@@ -1,31 +1,20 @@
-import { useEffect, useState } from 'react';
-import { getAsyncStorageValue } from '../../../../utils/asyncStorage';
+import { useEffect } from 'react';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { useLazyQuery } from '@apollo/client';
 import { USER_QUERY } from '../../graphql/queries/user';
 import * as React from 'react';
+import { getAsyncStorageValue } from '../../../../utils/asyncStorage';
 
 const UserProvider = ({ children }: { children: any }) => {
-  const [accessToken, setAccessToken] = useState<null | string>(null);
+  const [fetchUser, { loading }] = useLazyQuery(USER_QUERY);
   useEffect(() => {
     (async () => {
       const accessToken = await getAsyncStorageValue('accessToken');
-      setAccessToken(accessToken);
+      if (accessToken) {
+        await fetchUser();
+      }
     })();
   }, []);
-  
-  const [fetchUser, { loading }] = useLazyQuery(USER_QUERY, {
-    context: {
-      headers: {
-        authorization: `Bearer ${accessToken}`, // TODO: remove headers from this place
-      },
-    },
-  });
-  useEffect(() => {
-    if (accessToken) {
-      fetchUser();
-    }
-  }, [accessToken]);
   
   if (loading) {
     return <ActivityIndicator/>;
