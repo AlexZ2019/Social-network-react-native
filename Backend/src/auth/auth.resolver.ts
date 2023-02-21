@@ -2,7 +2,7 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Injectable, UseGuards } from '@nestjs/common';
 import AuthService from './auth.service';
 import Tokens from './models/tokens.model';
-import AuthArgs from './dto/dto/inputs.dto';
+import AuthArgs from './dto/inputs.dto';
 import RefreshTokenGuard from './guards/refreshToken.guard';
 import AccessTokenGuard from './guards/accessToken.guard';
 
@@ -27,11 +27,10 @@ export default class AuthResolver {
   
   @Mutation(() => Boolean)
   @UseGuards(AccessTokenGuard)
-  public async logout(@Context() context) {
+  public async logout(@Context() context): Promise<void> {
     await this.authService.logout(
       context.req.user.id,
       context.req.headers.authorization.replace('Bearer ', ''),
     );
-    return true;
   }
 }

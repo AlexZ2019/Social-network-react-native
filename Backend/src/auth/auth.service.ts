@@ -7,8 +7,8 @@ import UserService from '../user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import comparePassword from './utils/comparePassword';
-import AuthArgs from './dto/dto/inputs.dto';
 import Token from './entities/token.entity';
+import AuthArgs from './dto/inputs.dto';
 
 @Injectable()
 export default class AuthService {
