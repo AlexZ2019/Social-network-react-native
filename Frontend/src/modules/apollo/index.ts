@@ -59,18 +59,18 @@ const errorLink = onError(
         switch (err.extensions.code) {
           case 'UNAUTHENTICATED':
             // ignore 401 error for a refresh request
-            if (operation.operationName === 'refreshToken') return;
-    
+            if (operation.operationName === 'RefreshToken') return;
+  
             return new Observable<FetchResult<Record<string, any>>>(
               (observer) => {
                 (async () => {
                   try {
                     const accessToken = await refreshToken();
-            
+          
                     if (!accessToken) {
                       throw new GraphQLError('Empty AccessToken');
                     }
-            
+          
                     forward(operation);
                   } catch (err) {
                     observer.error(err);
@@ -81,8 +81,8 @@ const errorLink = onError(
         }
       }
     }
-    
-    if (networkError) console.log(`[Network error]: ${networkError}`);
+  
+    if (networkError) console.log(`[Network error]: ${networkError}`); // TODO: Remove console log
   },
 );
 const authLink = setContext(async (operation, { headers }) => {
