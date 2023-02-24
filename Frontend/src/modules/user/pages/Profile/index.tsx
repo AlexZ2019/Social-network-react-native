@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { USER_QUERY } from '../../graphql/queries/user';
 import { useNavigation } from '@react-navigation/native';
 import UserInfo from '../../components/UserInfo';
+import ProfileHeader from '../../components/ProfileHeader';
 
 const Profile = () => {
   
@@ -9,7 +10,11 @@ const Profile = () => {
   const navigation = useNavigation();
   
   return (
-    <UserInfo user={data}/>
+    <>
+      <ProfileHeader nickname={data.getCurrentUser.nickname}
+                     email={data.getCurrentUser.email}/>
+      <UserInfo user={data.getCurrentUser}/>
+    </>
   );
 };
 
