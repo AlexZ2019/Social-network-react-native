@@ -1,12 +1,16 @@
 import {
   ApolloClient,
-  createHttpLink, FetchResult,
-  from, GraphQLRequest,
-  InMemoryCache, Observable,
+  createHttpLink,
+  FetchResult,
+  from,
+  GraphQLRequest,
+  InMemoryCache,
+  Observable,
 } from '@apollo/client';
 import { API_HOST, API_PORT } from '@env';
 import {
-  getAsyncStorageValue, removeAsyncStorageValue,
+  getAsyncStorageValue,
+  removeAsyncStorageValue,
   setAsyncStorageValue,
 } from '../../utils/asyncStorage';
 import { setContext } from '@apollo/client/link/context';
@@ -56,17 +60,17 @@ const errorLink = onError(
           case 'UNAUTHENTICATED':
             // ignore 401 error for a refresh request
             if (operation.operationName === 'refreshToken') return;
-            
-            const observable = new Observable<FetchResult<Record<string, any>>>(
+    
+            return new Observable<FetchResult<Record<string, any>>>(
               (observer) => {
                 (async () => {
                   try {
                     const accessToken = await refreshToken();
-                    
+            
                     if (!accessToken) {
                       throw new GraphQLError('Empty AccessToken');
                     }
-                    
+            
                     forward(operation);
                   } catch (err) {
                     observer.error(err);
@@ -74,8 +78,6 @@ const errorLink = onError(
                 })();
               },
             );
-            
-            return observable;
         }
       }
     }
