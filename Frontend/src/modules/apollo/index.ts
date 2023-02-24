@@ -1,8 +1,8 @@
 import {
   ApolloClient,
-  createHttpLink,
-  from,
-  InMemoryCache,
+  createHttpLink, FetchResult,
+  from, GraphQLRequest,
+  InMemoryCache, Observable,
 } from '@apollo/client';
 import { API_HOST, API_PORT } from '@env';
 import {
@@ -10,6 +10,9 @@ import {
   setAsyncStorageValue,
 } from '../../utils/asyncStorage';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
+import { GraphQLError } from 'graphql/error';
+import { REFRESH_TOKEN_MUTATION } from '../auth/graphql/mutations/refreshToken';
 
 const isRefreshRequest = (operation: GraphQLRequest) => operation.operationName ===
   'refreshToken';
@@ -25,12 +28,10 @@ const returnTokenDependingOnOperation = (operation: GraphQLRequest) => {
 
 const refreshToken = async () => {
   try {
-    const refreshResolverResponse = await client.mutate<{
-      refreshToken: string;
-    }>({
-      mutation: REFRESH_TOKEN,
+    const refreshResolverResponse = await client.mutate({
+      mutation: REFRESH_TOKEN_MUTATION,
     });
-    
+  
     const accessToken = refreshResolverResponse.data?.refreshToken.accessToken;
     await setAsyncStorageValue('accessToken',
       refreshResolverResponse.data?.refreshToken.accessToken);
