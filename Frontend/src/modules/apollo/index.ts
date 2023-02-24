@@ -17,7 +17,6 @@ import { REFRESH_TOKEN_MUTATION } from '../auth/graphql/mutations/refreshToken';
 const isRefreshRequest = (operation: GraphQLRequest) => operation.operationName ===
   'refreshToken';
 
-// Returns accesstoken if operation is not a refresh token request
 const returnTokenDependingOnOperation = (operation: GraphQLRequest) => {
   if (isRefreshRequest(operation)) {
     return getAsyncStorageValue('refreshToken') || '';
@@ -60,7 +59,6 @@ const errorLink = onError(
             
             const observable = new Observable<FetchResult<Record<string, any>>>(
               (observer) => {
-                // used an annonymous function for using an async function
                 (async () => {
                   try {
                     const accessToken = await refreshToken();
