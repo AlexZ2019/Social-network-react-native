@@ -1,11 +1,9 @@
 import {
   ApolloClient,
   createHttpLink,
-  FetchResult,
-  from,
+  from, fromPromise,
   GraphQLRequest,
   InMemoryCache,
-  Observable,
 } from '@apollo/client';
 import { API_HOST, API_PORT } from '@env';
 import {
@@ -15,7 +13,6 @@ import {
 } from '../../utils/asyncStorage';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
-import { GraphQLError } from 'graphql/error';
 import { REFRESH_TOKEN_MUTATION } from '../auth/graphql/mutations/refreshToken';
 
 const isRefreshRequest = (operation: GraphQLRequest) => operation.operationName ===
@@ -58,31 +55,28 @@ const errorLink = onError(
       for (const err of graphQLErrors) {
         switch (err.extensions.code) {
           case 'UNAUTHENTICATED':
-            // ignore 401 error for a refresh request
             if (operation.operationName === 'RefreshToken') return;
-  
-            return new Observable<FetchResult<Record<string, any>>>(
-              (observer) => {
-                (async () => {
-                  try {
-                    const accessToken = await refreshToken();
-          
-                    if (!accessToken) {
-                      throw new GraphQLError('Empty AccessToken');
-                    }
-          
-                    forward(operation);
-                  } catch (err) {
-                    observer.error(err);
-                  }
-                })();
-              },
-            );
+            return fromPromise(
+              refreshToken().catch((error) => {
+                return;
+              }),
+            ).filter((value) => Boolean(value)).flatMap((accessToken) => {
+              const oldHeaders = operation.getContext().headers;
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  authorization: `Bearer ${accessToken}`,
+                },
+              });
+              return forward(operation);
+            });
         }
       }
     }
   
-    if (networkError) console.log(`[Network error]: ${networkError}`); // TODO: Remove console log
+    if (networkError) {
+      //TODO: handle this case
+    }
   },
 );
 const authLink = setContext(async (operation, { headers }) => {
