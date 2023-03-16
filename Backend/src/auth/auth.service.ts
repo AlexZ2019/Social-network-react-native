@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import comparePassword from './utils/comparePassword';
 import Token from './entities/token.entity';
 import AuthArgs from './dto/inputs.dto';
+import { OAuth2Client } from 'google-auth-library';
 
 @Injectable()
 export default class AuthService {
@@ -19,7 +20,6 @@ export default class AuthService {
     @InjectRepository(Token)
     private readonly tokenRepository: Repository<Token>,
   ) {}
-
   private generateTokens(payload) {
     return {
       accessToken: this.jwtService.sign(payload, {
@@ -32,7 +32,7 @@ export default class AuthService {
       }),
     };
   }
-  
+
   public async login(user: AuthArgs) {
     const existedUser = await this.usersService.getUserByEmailWithPassword(
       user.email,
@@ -42,15 +42,8 @@ export default class AuthService {
         user.password,
         existedUser.password,
       );
-      // TODO: check if comparePassword works ^^
       if (matchedPassword) {
-        const payload = {
-          email: existedUser.email,
-          id: existedUser.id,
-        };
-        const tokens = this.generateTokens(payload);
-        await this.tokenRepository.save({ userId: existedUser.id, ...tokens });
-        return tokens;
+        return this.saveAndReturnTokens(existedUser);
       }
     }
     throw new GraphQLError('Invalid Credentials');
@@ -60,13 +53,38 @@ export default class AuthService {
     user: { id: number; email: string },
     refreshToken: string,
   ) {
-    const newTokens = this.generateTokens(user);
     await this.tokenRepository.delete({ userId: user.id, refreshToken });
-    await this.tokenRepository.save({ userId: user.id, ...newTokens });
-    return newTokens;
+    return this.saveAndReturnTokens(user);
   }
   
   public async logout(id: number, accessToken: string): Promise<void> {
     await this.tokenRepository.delete({ userId: id, accessToken });
+  }
+  
+  async googleSignIn(payload) {
+    const client = new OAuth2Client(this.configService.get('GOOGLE_CLIENT_ID'));
+    const parsedToken = await client.verifyIdToken({
+      idToken: payload.token,
+      audience: this.configService.get('GOOGLE_CLIENT_ID'),
+    });
+    const email = parsedToken.getPayload().email;
+    const userExists = await this.usersService.getUserByEmail(email);
+    if (!userExists) {
+      const newUser = await this.usersService.createGoogleUser(email);
+      return this.saveAndReturnTokens({
+        id: newUser.raw.id,
+        email: newUser.raw.email,
+      });
+    }
+    return this.saveAndReturnTokens(userExists);
+  }
+  
+  private async saveAndReturnTokens(user) {
+    const tokens = this.generateTokens({
+      id: user.id,
+      email: user.email,
+    });
+    await this.tokenRepository.save({ userId: user.id, ...tokens });
+    return tokens;
   }
 }
