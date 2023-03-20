@@ -1,16 +1,11 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
-import { IsEmail } from 'class-validator';
 
 @InputType()
 @ArgsType()
 export default class UserArgs {
-  @Field()
-  @IsEmail()
-  email: string;
-  
   @Field({ nullable: true })
   nickname: string;
-  
+
   @Field({ nullable: true })
   birthday: string | null;
   
@@ -22,4 +17,10 @@ export default class UserArgs {
   
   @Field({ nullable: true })
   sex: string;
+  
+  @Field({ nullable: true })
+  firstname: string;
+  
+  @Field({ nullable: true })
+  lastname: string;
 }

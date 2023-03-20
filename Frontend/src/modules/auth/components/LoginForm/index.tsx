@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ILogin } from '../../types';
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required(),
 });

@@ -8,7 +8,7 @@ class UserModel {
   @Field()
   email: string;
   
-  @Field()
+  @Field({ nullable: true })
   nickname: string;
   
   @Field({ nullable: true })

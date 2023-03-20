@@ -17,6 +17,9 @@ import { client } from './src/modules/apollo';
 import constants from './src/modules/News/constants';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StatusBar } from 'react-native';
+import React from 'react';
+import en_US from '@ant-design/react-native/lib/locale-provider/en_US';
+import { Provider } from '@ant-design/react-native';
 
 const Drawer = createDrawerNavigator();
 
@@ -32,36 +35,38 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <UserProvider>
-        <StatusBar/>
-        <NavigationContainer>
-          <Drawer.Navigator initialRouteName={constants.news}>
-            {modules.routes.map((route: IRoute, index) => {
-              switch (route.type) {
-                case RouteType.NotAuth:
-                  return (
-                    <Drawer.Screen key={index} name={route.path}
-                                   options={{
-                                     headerShown: false,
-                                     drawerItemStyle: { display: 'none' },
-                                   }}
-                                   children={() => (
-                                     <NotAuthRouteWrapper>{route.page}</NotAuthRouteWrapper>
-                                   )}/>
-                  );
-                case RouteType.Auth:
-                  return (
-                    <Drawer.Screen key={index} name={route.path}
-                                  children={() => (
-                                    <PrivetRouteWrapper>{route.page}</PrivetRouteWrapper>
-                                  )}/>
-                  );
-                default:
-                  return <Drawer.Screen key={index} name={route.path}
-                                        children={() => route.page}/>;
-              }
-            })}
-          </Drawer.Navigator>
-        </NavigationContainer>
+        <Provider locale={en_US}>
+          <StatusBar/>
+          <NavigationContainer>
+            <Drawer.Navigator initialRouteName={constants.news}>
+              {modules.routes.map((route: IRoute, index) => {
+                switch (route.type) {
+                  case RouteType.NotAuth:
+                    return (
+                      <Drawer.Screen key={index} name={route.path}
+                                     options={{
+                                       headerShown: false,
+                                       drawerItemStyle: { display: 'none' },
+                                     }}
+                                     children={() => (
+                                       <NotAuthRouteWrapper>{route.page}</NotAuthRouteWrapper>
+                                     )}/>
+                    );
+                  case RouteType.Auth:
+                    return (
+                      <Drawer.Screen key={index} name={route.path}
+                                     children={() => (
+                                       <PrivetRouteWrapper>{route.page}</PrivetRouteWrapper>
+                                     )}/>
+                    );
+                  default:
+                    return <Drawer.Screen key={index} name={route.path}
+                                          children={() => route.page}/>;
+                }
+              })}
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </Provider>
       </UserProvider>
     </ApolloProvider>
   );

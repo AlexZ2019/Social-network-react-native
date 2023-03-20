@@ -10,6 +10,9 @@ import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ILogin } from '../../types';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login';
+import React from 'react';
+import { Button } from '@ant-design/react-native';
+import constants from '../../constants';
 
 const LoginPage = () => {
   //TODO: add locales
@@ -33,8 +36,10 @@ const LoginPage = () => {
   return (
     <View>
       <Text>Welcome!</Text>
-      <Text>Please, sign in</Text>
       <LoginForm onSubmit={onSubmit}/>
+      <Button onPress={() => navigation.navigate(constants.register)}>
+        {constants.register}
+      </Button>
     </View>
   );
 };

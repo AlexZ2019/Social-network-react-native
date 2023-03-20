@@ -7,6 +7,7 @@ import AccessTokenGuard from '../auth/guards/accessToken.guard';
 import UserModel from './models/user.model';
 import Token from '../auth/entities/token.entity';
 import UserArgs from './dto/user.dto';
+import AuthArgs from '../auth/dto/inputs.dto';
 
 @Injectable()
 @Resolver()
@@ -30,7 +31,7 @@ class UserResolver {
   }
   
   @Mutation(() => Boolean)
-  async createUser(@Args() user: UserArgs): Promise<boolean> {
+  async createUser(@Args() user: AuthArgs): Promise<boolean> {
     try {
       await this.userService.createUser(user);
       return true;
