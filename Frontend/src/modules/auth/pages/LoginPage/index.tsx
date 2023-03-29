@@ -28,6 +28,7 @@ const LoginPage = () => {
     onCompleted: async (data: { login: { accessToken: string; refreshToken: string } }) => {
       const tokens = data.login;
       await setTokensToAsyncStorage(tokens);
+      reset();
     },
   });
   const {
@@ -46,7 +47,6 @@ const LoginPage = () => {
     if (accessToken) {
       await fetchUser({ onCompleted: () => navigation.navigate('News') }); //TODO: need to save a user to apollo cache
     }
-    reset();
   };
   
   const navigateAndResetForm = () => {

@@ -12,34 +12,14 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IRegistration } from '../../types';
 import React from 'react';
+import { Control, UseFormHandleSubmit } from 'react-hook-form/dist/types/form';
 
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(5).required(),
-  sex: yup.string<'male' | 'female'>().nullable(),
-  firstname: yup.string().min(2),
-  lastname: yup.string().min(2),
-  birthday: yup.date(),
-  nickname: yup.string().min(3),
-  biography: yup.string().min(3),
-});
-
-const RegistrationForm = ({ onSubmit, loading }: {
+const RegistrationForm = ({ onSubmit, loading, handleSubmit, control }: {
   onSubmit: (data: IRegistration) => Promise<void>,
-  loading: boolean
+  loading: boolean,
+  handleSubmit: UseFormHandleSubmit<TFieldValues>,
+  control: Control<TFieldValues, TContext>
 }) => {
-  const {
-    control,
-    handleSubmit,
-  } = useForm<InputItem>({
-    mode: 'onTouched',
-    resolver: yupResolver(schema),
-    defaultValues: {
-      sex: 'Male',
-      birthday: new Date(),
-    },
-  });
-  
   return <View>
     <Controller
       name="email"
@@ -98,7 +78,6 @@ const RegistrationForm = ({ onSubmit, loading }: {
         {...field}
         locale="en"
         mode="date"
-        // defaultDate={new Date()}
         minDate={new Date(1940, 7, 6)}
         maxDate={new Date()}
         format="YYYY-MM-DD">
