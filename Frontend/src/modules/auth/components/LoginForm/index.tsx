@@ -1,26 +1,15 @@
 import { View } from 'react-native';
 import { InputItem, Button } from '@ant-design/react-native';
-import { useForm, Controller } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller } from 'react-hook-form';
 import { ILogin } from '../../types';
+import { Control, UseFormHandleSubmit } from 'react-hook-form/dist/types/form';
 
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
-});
-
-const LoginForm = ({ onSubmit, loading }: {
+const LoginForm = ({ onSubmit, loading, handleSubmit, control }: {
   onSubmit: (data: ILogin) => Promise<void>,
-  loading: boolean
+  loading: boolean,
+  handleSubmit: UseFormHandleSubmit<TFieldValues>,
+  control: Control<TFieldValues, TContext>
 }) => {
-  const {
-    control,
-    handleSubmit,
-  } = useForm<InputItem>({
-    mode: 'onTouched',
-    resolver: yupResolver(schema),
-  });
   
   return <View>
     <Controller

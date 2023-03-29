@@ -11,9 +11,16 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ILogin } from '../../types';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login';
 import React from 'react';
-import { Button } from '@ant-design/react-native';
+import { Button, InputItem } from '@ant-design/react-native';
 import constants from '../../constants';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
 const LoginPage = () => {
   //TODO: add locales
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -23,6 +30,14 @@ const LoginPage = () => {
       await setTokensToAsyncStorage(tokens);
     },
   });
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm<InputItem>({
+    mode: 'onTouched',
+    resolver: yupResolver(schema),
+  });
   
   const [fetchUser] = useLazyQuery(USER_QUERY);
   const onSubmit = async (data: ILogin): Promise<void> => {
@@ -31,13 +46,20 @@ const LoginPage = () => {
     if (accessToken) {
       await fetchUser({ onCompleted: () => navigation.navigate('News') }); //TODO: need to save a user to apollo cache
     }
+    reset();
+  };
+  
+  const navigateAndResetForm = () => {
+    navigation.navigate(constants.register);
+    reset();
   };
   
   return (
     <View>
       <Text>Welcome!</Text>
-      <LoginForm onSubmit={onSubmit} loading={loading}/>
-      <Button onPress={() => navigation.navigate(constants.register)}>
+      <LoginForm onSubmit={onSubmit} loading={loading} control={control}
+                 handleSubmit={handleSubmit}/>
+      <Button onPress={navigateAndResetForm}>
         {constants.register}
       </Button>
     </View>
