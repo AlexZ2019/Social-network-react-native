@@ -85,6 +85,8 @@ const EditUserForm = ({ user, onSubmit, loading }:
         render={({ field }) =>
           <DatePicker
             value={field.value}
+            minDate={new Date(1940, 7, 6)}
+            maxDate={new Date()}
             mode="date"
             locale="en"
             format="YYYY-MM-DD">
