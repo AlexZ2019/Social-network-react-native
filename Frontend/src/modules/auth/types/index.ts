@@ -9,6 +9,7 @@ export interface IUserInfo {
   lastname?: string;
   nickname?: string;
   biography?: string;
+  status?: string;
 }
 
 export interface IRegistration extends ILogin, IUserInfo {}

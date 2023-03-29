@@ -2,7 +2,6 @@ import { Accordion, Card, Flex } from '@ant-design/react-native';
 import { Text, View } from 'react-native';
 import { IUser } from '../../types';
 import { useState } from 'react';
-import ProfileHeader from '../ProfileHeader';
 
 const UserInfo = ({ user }: { user: IUser }) => {
   const [activeSections, setActiveSections] = useState<number[]>([]);
@@ -16,23 +15,23 @@ const UserInfo = ({ user }: { user: IUser }) => {
         <Accordion.Panel header="Profile Info">
           <Card full>
             <Card.Body>
-              <Flex>
+              <Flex justify="between" style={{ padding: 15 }}>
                 <Flex direction="column">
-                  <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                  <Flex.Item style={{ margin: 4 }}>
                     <Text>Email</Text>
                     <Text>{user.email}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                  <Flex.Item style={{ margin: 4 }}>
                     <Text>Birthday</Text>
                     <Text>{user.birthday}</Text>
                   </Flex.Item>
                 </Flex>
                 <Flex direction="column">
-                  <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                  <Flex.Item style={{ margin: 4 }}>
                     <Text>Status</Text>
                     <Text>{user.status}</Text>
                   </Flex.Item>
-                  <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                  <Flex.Item style={{ margin: 4 }}>
                     <Text>Biography</Text>
                     <Text>{user.biography}</Text>
                   </Flex.Item>

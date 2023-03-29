@@ -5,7 +5,14 @@ import { Button, Flex } from '@ant-design/react-native';
 const ProfileHeader = ({
   nickname,
   email,
-}: { nickname?: string, email?: string }) => {
+  serIsEditProfile,
+  isEditProfile,
+}: {
+  nickname?: string, email?: string,
+  serIsEditProfile: () => void,
+  isEditProfile: boolean,
+}) => {
+  
   return (
     <Flex>
       <FlexItem>
@@ -15,7 +22,8 @@ const ProfileHeader = ({
       </FlexItem>
       <FlexItem>
         <Button type="primary" style={{ width: 45, marginLeft: 125 }}
-                size="small">Edit</Button>
+                size="small"
+                onPress={() => serIsEditProfile(!isEditProfile)}>Edit</Button>
       </FlexItem>
     </Flex>
   );
