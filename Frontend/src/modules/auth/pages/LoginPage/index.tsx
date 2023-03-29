@@ -17,7 +17,7 @@ import constants from '../../constants';
 const LoginPage = () => {
   //TODO: add locales
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const [login] = useMutation(LOGIN_MUTATION, {
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted: async (data: { login: { accessToken: string; refreshToken: string } }) => {
       const tokens = data.login;
       await setTokensToAsyncStorage(tokens);
@@ -36,7 +36,7 @@ const LoginPage = () => {
   return (
     <View>
       <Text>Welcome!</Text>
-      <LoginForm onSubmit={onSubmit}/>
+      <LoginForm onSubmit={onSubmit} loading={loading}/>
       <Button onPress={() => navigation.navigate(constants.register)}>
         {constants.register}
       </Button>

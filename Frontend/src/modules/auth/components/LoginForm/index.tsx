@@ -10,8 +10,9 @@ const schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-const LoginForm = ({ onSubmit }: {
-  onSubmit: (data: ILogin) => Promise<void>
+const LoginForm = ({ onSubmit, loading }: {
+  onSubmit: (data: ILogin) => Promise<void>,
+  loading: boolean
 }) => {
   const {
     control,
@@ -43,7 +44,8 @@ const LoginForm = ({ onSubmit }: {
         placeholder="password">
       </InputItem>}
     />
-    <Button onPress={handleSubmit(onSubmit)} type="primary">Login</Button>
+    <Button onPress={handleSubmit(onSubmit)} type="primary"
+            loading={loading}>Login</Button>
   </View>;
 };
 

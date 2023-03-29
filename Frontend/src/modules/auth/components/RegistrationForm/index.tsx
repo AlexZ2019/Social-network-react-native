@@ -24,8 +24,9 @@ const schema = yup.object().shape({
   biography: yup.string().min(3),
 });
 
-const RegistrationForm = ({ onSubmit }: {
-  onSubmit: (data: IRegistration) => Promise<void>
+const RegistrationForm = ({ onSubmit, loading }: {
+  onSubmit: (data: IRegistration) => Promise<void>,
+  loading: boolean
 }) => {
   const {
     control,
@@ -126,7 +127,7 @@ const RegistrationForm = ({ onSubmit }: {
       />}
     />
     <Button onPress={handleSubmit(onSubmit)}
-            type="primary">{constants.register}</Button>
+            type="primary" loading={loading}>{constants.register}</Button>
   </View>;
 };
 

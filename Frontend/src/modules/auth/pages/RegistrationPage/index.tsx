@@ -12,7 +12,7 @@ import { REGISTER_MUTATION } from '../../graphql/mutations/register';
 const RegistrationPage = () => {
   //TODO: add locales
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const [register] = useMutation(REGISTER_MUTATION, {
+  const [register, { loading }] = useMutation(REGISTER_MUTATION, {
     onCompleted: () => {
       navigation.navigate(constants.login);
     },
@@ -24,7 +24,7 @@ const RegistrationPage = () => {
   return (
     <View>
       <Text>Please, fill in the form</Text>
-      <RegistrationForm onSubmit={onSubmit}/>
+      <RegistrationForm onSubmit={onSubmit} loading={loading}/>
       <Button onPress={() => navigation.navigate(constants.login)}>
         {constants.login}
       </Button>
