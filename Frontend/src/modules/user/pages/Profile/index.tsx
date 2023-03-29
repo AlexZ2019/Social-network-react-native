@@ -9,21 +9,26 @@ import { EDIT_USER_MUTATION } from '../../graphql/mutations/editUser';
 
 const Profile = ({ id }: { id?: number }) => {
   const { data } = useQuery(USER_QUERY);
-  const [isEditProfile, serIsEditProfile] = useState<Boolean>(false);
-  const [editUser] = useMutation(EDIT_USER_MUTATION);
+  const [isEditProfile, setIsEditProfile] = useState<Boolean>(false);
+  const [editUser, { loading }] = useMutation(EDIT_USER_MUTATION);
   const onSubmit = async (data: IUserInfo): Promise<void> => {
-    await editUser({ variables: data });
+    await editUser({
+      variables: data, onCompleted: () => {
+        setIsEditProfile(false);
+      },
+    });
   };
   
   return (
     <>
       <ProfileHeader nickname={data.getCurrentUser.nickname}
                      email={data.getCurrentUser.email}
-                     serIsEditProfile={serIsEditProfile}
+                     serIsEditProfile={setIsEditProfile}
                      isEditProfile={isEditProfile}
       />
       {isEditProfile && !id
-        ? <EditUserForm user={data.getCurrentUser} onSubmit={onSubmit}/>
+        ? <EditUserForm user={data.getCurrentUser} onSubmit={onSubmit}
+                        loading={loading}/>
         : <UserInfo user={data.getCurrentUser}/>}
     </>
   );
