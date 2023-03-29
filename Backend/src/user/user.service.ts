@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import User from './entity/user.entity';
 import { Repository } from 'typeorm';
 import { IUserData } from './types';
+import AuthArgs from '../auth/dto/inputs.dto';
 
 @Injectable()
 class UserService {
@@ -24,7 +25,7 @@ class UserService {
     await this.userRepository.update({ id: userId }, { ...userData });
   }
   
-  async createUser(user: { email: string; password: string; sex: string }) {
+  async createUser(user: AuthArgs) {
     const existedUser = await this.userRepository.findOneBy({
       email: user.email,
     });

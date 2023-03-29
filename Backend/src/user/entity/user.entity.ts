@@ -5,7 +5,7 @@ import BaseEntity from '../../common/entity/base.entity';
 export default class User extends BaseEntity {
   @Column()
   email: string;
-  
+
   @Column()
   nickname: string;
   
@@ -20,4 +20,13 @@ export default class User extends BaseEntity {
   
   @Column()
   status: string;
+  
+  @Column()
+  sex: string;
+  
+  @Column()
+  firstname: string;
+  
+  @Column()
+  lastname: string;
 }

@@ -4,13 +4,14 @@ import {
   DatePicker,
   InputItem,
   TextareaItem,
-  List,
+  List, Radio,
 } from '@ant-design/react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IRegistration } from '../../types';
+import React from 'react';
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -32,6 +33,10 @@ const RegistrationForm = ({ onSubmit }: {
   } = useForm<InputItem>({
     mode: 'onTouched',
     resolver: yupResolver(schema),
+    defaultValues: {
+      sex: 'Male',
+      birthday: new Date(),
+    },
   });
   
   return <View>
@@ -59,12 +64,11 @@ const RegistrationForm = ({ onSubmit }: {
     <Controller
       name="sex"
       control={control}
-      render={({ field }) => <InputItem
-        {...field}
-        clear
-        error
-        placeholder="sex">
-      </InputItem>}
+      render={({ field }) =>
+        <Radio.Group defaultValue="1" {...field}>
+          <Radio value="Male">Male</Radio>
+          <Radio value="Female">Female</Radio>
+        </Radio.Group>}
     />
     <Controller
       name="firstname"
@@ -93,7 +97,7 @@ const RegistrationForm = ({ onSubmit }: {
         {...field}
         locale="en"
         mode="date"
-        defaultDate={new Date()}
+        // defaultDate={new Date()}
         minDate={new Date(1940, 7, 6)}
         maxDate={new Date()}
         format="YYYY-MM-DD">
