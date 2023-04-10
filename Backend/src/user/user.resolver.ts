@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import UserService from './user.service';
 import { Injectable, UseGuards } from '@nestjs/common';
 import AccessTokenGuard from '../auth/guards/accessToken.guard';
-import UserModel from './models/user.model';
+import UserModel from './model/user.model';
 import Token from '../auth/entities/token.entity';
 import UserArgs from './dto/user.dto';
 import AuthArgs from '../auth/dto/inputs.dto';

@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Injectable, UseGuards } from '@nestjs/common';
 import AuthService from './auth.service';
-import Tokens from './models/tokens.model';
+import Tokens from './model/tokens.model';
 import AuthArgs from './dto/inputs.dto';
 import RefreshTokenGuard from './guards/refreshToken.guard';
 import AccessTokenGuard from './guards/accessToken.guard';

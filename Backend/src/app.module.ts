@@ -6,6 +6,7 @@ import UserModule from './user/user.module';
 import { CommonModule } from './common/common.module';
 import AuthModule from './auth/auth.module';
 import DbModule from './db/db.module';
+import PostModule from './post/post.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import DbModule from './db/db.module';
     DbModule,
     UserModule,
     CommonModule,
+    PostModule,
   ],
   providers: [],
 })
