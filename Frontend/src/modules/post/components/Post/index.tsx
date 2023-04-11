@@ -8,7 +8,7 @@ type Props = {
   media: string;
 }
 const Post = ({ media, text }: Props) => {
-  console.log('text', text);
+  
   return (
     <Card>
       <Card.Header

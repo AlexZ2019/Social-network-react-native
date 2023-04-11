@@ -12,10 +12,10 @@ import DeletePostArgs from './dto/deletePost.dto';
 @UseGuards(AccessTokenGuard)
 class PostResolver {
   constructor(private readonly postService: PostService) {}
-  
+
   @Query(() => [PostModel])
   async getUserPosts(@Context() context): Promise<PostModel[]> {
-    const posts = await this.postService.getUserPosts(context.id);
+    const posts = await this.postService.getUserPosts(context.req.user.id);
     if (posts.length) {
       return posts;
     } else {

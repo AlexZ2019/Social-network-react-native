@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { GetPosts } from '../../graphql/queries/getPosts';
+import { GET_POSTS } from '../../graphql/queries/getPosts';
 import { FlatList } from 'react-native';
 import Post from '../Post';
 import { ActivityIndicator } from '@ant-design/react-native';
 import * as React from 'react';
 
 const Posts = () => {
-  const { data, loading } = useQuery(GetPosts);
+  const { data, loading } = useQuery(GET_POSTS);
   if (loading) {
     return <ActivityIndicator/>;
   }

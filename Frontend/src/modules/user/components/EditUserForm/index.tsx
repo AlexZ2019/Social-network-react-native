@@ -23,7 +23,6 @@ const schema = yup.object().shape({
 });
 const EditUserForm = ({ user, onSubmit, loading }:
   { user: IUser, onSubmit: (data: IUserInfo) => Promise<void>, loading: boolean }) => {
-  console.log('user', user);
   const {
     control,
     handleSubmit,

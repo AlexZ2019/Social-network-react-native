@@ -7,6 +7,7 @@ import EditUserForm from '../../components/EditUserForm';
 import { IUserInfo } from '../../../auth/types';
 import { EDIT_USER_MUTATION } from '../../graphql/mutations/editUser';
 import Posts from '../../../post/components/Posts';
+import CreatePost from '../../../post/components/CreatePost';
 
 const Profile = ({ id }: { id?: number }) => {
   const { data } = useQuery(USER_QUERY);
@@ -31,6 +32,7 @@ const Profile = ({ id }: { id?: number }) => {
         ? <EditUserForm user={data.getCurrentUser} onSubmit={onSubmit}
                         loading={loading}/>
         : <UserInfo user={data.getCurrentUser}/>}
+      <CreatePost/>
       <Posts/>
     </>
   );
