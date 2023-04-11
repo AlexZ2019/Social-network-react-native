@@ -1,6 +1,7 @@
 import FlexItem from '@ant-design/react-native/es/flex/FlexItem';
 import { Image, Text } from 'react-native';
 import { Button, Flex } from '@ant-design/react-native';
+import { Dispatch, SetStateAction } from 'react';
 
 const ProfileHeader = ({
   nickname,
@@ -9,8 +10,8 @@ const ProfileHeader = ({
   isEditProfile,
 }: {
   nickname?: string, email?: string,
-  serIsEditProfile: () => void,
-  isEditProfile: boolean,
+  serIsEditProfile: Dispatch<SetStateAction<Boolean>>,
+  isEditProfile: Boolean,
 }) => {
   
   return (
