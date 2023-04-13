@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { USER_QUERY } from '../../graphql/queries/user';
 import UserInfo from '../../components/UserInfo';
 import ProfileHeader from '../../components/ProfileHeader';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import EditUserForm from '../../components/EditUserForm';
 import { IUserInfo } from '../../../auth/types';
 import { EDIT_USER_MUTATION } from '../../graphql/mutations/editUser';

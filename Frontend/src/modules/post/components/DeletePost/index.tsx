@@ -1,10 +1,10 @@
 import { ActivityIndicator, Button, Icon } from '@ant-design/react-native';
 import { useMutation } from '@apollo/client';
-import { DELETE_POSTS } from '../../graphql/mutations/deletePost';
+import { DELETE_POST } from '../../graphql/mutations/deletePost';
 
 const DeletePost = ({ id }: { id: number }) => {
   
-  const [deletePost, { loading }] = useMutation(DELETE_POSTS);
+  const [deletePost, { loading }] = useMutation(DELETE_POST);
   
   const onPressHandler = async () => {
     await deletePost({

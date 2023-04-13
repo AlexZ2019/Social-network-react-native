@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, View, Text, Flex } from '@ant-design/react-native';
 import DeletePost from '../DeletePost';
+import EditPost from '../EditPost';
 
 type Props = {
   id: number;
@@ -32,6 +33,7 @@ const Post = ({ media, text, id, isEditable }: Props) => {
         </View>
         {isEditable &&
           <View>
+            <EditPost text={text} id={id}/>
             <DeletePost id={id}/>
           </View>
         }

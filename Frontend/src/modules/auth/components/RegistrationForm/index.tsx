@@ -6,10 +6,8 @@ import {
   TextareaItem,
   List, Radio,
 } from '@ant-design/react-native';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { View } from 'react-native';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { IRegistration } from '../../types';
 import React from 'react';
 import { Control, UseFormHandleSubmit } from 'react-hook-form/dist/types/form';
