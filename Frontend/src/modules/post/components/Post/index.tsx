@@ -1,21 +1,41 @@
 import React from 'react';
-import { Card, View, Text } from '@ant-design/react-native';
+import { Card, View, Text, Flex } from '@ant-design/react-native';
+import DeletePost from '../DeletePost';
 
 type Props = {
+  id: number;
   text: string;
   firstname?: string;
   lastname?: string;
   media: string;
+  isEditable?: boolean
 }
-const Post = ({ media, text }: Props) => {
+
+const postStyle = {
+  marginTop: 25,
+  width: '96%',
+  marginLeft: '2%',
+  marginRight: '2%',
+};
+
+const headStyles = {
+  padding: 15,
+};
+
+const Post = ({ media, text, id, isEditable }: Props) => {
   
   return (
-    <Card>
-      <Card.Header
-        title="Post"
-        thumbStyle={{ width: 30, height: 30 }}
-        thumb="https://gw.alipayobjects.com/zos/rmsportal/MRhHctKOineMbKAZslML.jpg"
-      />
+    <Card style={postStyle}>
+      <Flex justify="between" style={headStyles}>
+        <View>
+          Post
+        </View>
+        {isEditable &&
+          <View>
+            <DeletePost id={id}/>
+          </View>
+        }
+      </Flex>
       <Card.Body>
         <View style={{ height: 42 }}>
           <Text style={{ marginLeft: 16 }}>{text}</Text>

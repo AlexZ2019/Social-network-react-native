@@ -5,7 +5,11 @@ import Post from '../Post';
 import { ActivityIndicator } from '@ant-design/react-native';
 import * as React from 'react';
 
-const Posts = () => {
+type Props = {
+  isEditable?: boolean
+}
+
+const Posts = ({ isEditable }: Props) => {
   const { data, loading } = useQuery(GET_POSTS);
   if (loading) {
     return <ActivityIndicator/>;
@@ -16,7 +20,7 @@ const Posts = () => {
       data={data.getUserPosts}
       renderItem={({ item }: any) => {
         return <Post text={item.text} media={item.media}
-                     key={item.id}/>;
+                     key={item.id} id={item.id} isEditable={isEditable}/>;
       }}
     />
   );

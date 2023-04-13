@@ -33,7 +33,7 @@ const Profile = ({ id }: { id?: number }) => {
                         loading={loading}/>
         : <UserInfo user={data.getCurrentUser}/>}
       <CreatePost/>
-      <Posts/>
+      <Posts isEditable/>
     </>
   );
 };
