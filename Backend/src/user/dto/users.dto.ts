@@ -5,7 +5,7 @@ import { ArgsType, Field, InputType } from '@nestjs/graphql';
 export default class UsersArgs {
   @Field({ nullable: true })
   page: number;
-  
+
   @Field({ nullable: true })
   pageSize: number;
   
@@ -13,5 +13,5 @@ export default class UsersArgs {
   nickname: string;
   
   @Field({ nullable: true })
-  email: number;
+  email: string;
 }

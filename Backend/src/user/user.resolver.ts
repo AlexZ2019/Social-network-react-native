@@ -41,26 +41,26 @@ class UserResolver {
       throw e;
     }
   }
-  
+
   @Mutation(() => Boolean)
   @UseGuards(AccessTokenGuard)
   async editUser(@Args() user: UserArgs, @Context() context): Promise<boolean> {
     await this.userService.updateUser(user, context.req.user.id);
     return true;
   }
-  
+
   @Query(() => UsersModel)
-  @UseGuards(AccessTokenGuard)
+  // @UseGuards(AccessTokenGuard)
   async getUsers(
     @Args() args: UsersArgs,
     @Context() context,
   ): Promise<UsersModel> {
-    const users = await this.userService.getUsers(
+    return this.userService.getUsers(
+      args.email,
       args.nickname,
       args.page,
       args.pageSize,
     );
-    return users;
   }
 }
 

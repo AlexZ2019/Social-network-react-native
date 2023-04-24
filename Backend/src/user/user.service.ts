@@ -21,11 +21,14 @@ class UserService {
     return restUser;
   }
   
-  async getUsers(nickname = '', page = 1, pageSize = 10) {
+  async getUsers(email = '', nickname = '', page = 1, pageSize = 10) {
+    console.log('email', email);
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.userRepository.findAndCount({
-      where: nickname && { nickname: Like('%' + nickname + '%') },
+      where:
+        (nickname && { nickname: Like('%' + nickname + '%') }) ||
+        (email && { email: Like('%' + email + '%') }),
       skip,
       take: pageSize,
     });
