@@ -8,6 +8,8 @@ import UserModel from './model/user.model';
 import Token from '../auth/entities/token.entity';
 import UserArgs from './dto/user.dto';
 import AuthArgs from '../auth/dto/inputs.dto';
+import UsersArgs from './dto/users.dto';
+import UsersModel from './model/users.model';
 
 @Injectable()
 @Resolver()
@@ -29,7 +31,7 @@ class UserResolver {
       return this.userService.getUserByEmail(context.req.user.email);
     }
   }
-  
+
   @Mutation(() => Boolean)
   async createUser(@Args() user: AuthArgs): Promise<boolean> {
     try {
@@ -45,6 +47,20 @@ class UserResolver {
   async editUser(@Args() user: UserArgs, @Context() context): Promise<boolean> {
     await this.userService.updateUser(user, context.req.user.id);
     return true;
+  }
+  
+  @Query(() => UsersModel)
+  @UseGuards(AccessTokenGuard)
+  async getUsers(
+    @Args() args: UsersArgs,
+    @Context() context,
+  ): Promise<UsersModel> {
+    const users = await this.userService.getUsers(
+      args.nickname,
+      args.page,
+      args.pageSize,
+    );
+    return users;
   }
 }
 
