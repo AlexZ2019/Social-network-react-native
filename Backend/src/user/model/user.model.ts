@@ -4,7 +4,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 class UserModel {
   @Field()
   id: number;
-  
+
   @Field()
   email: string;
   
@@ -19,6 +19,9 @@ class UserModel {
   
   @Field({ nullable: true })
   biography: string | null;
+  
+  @Field({ nullable: true })
+  isFriend?: boolean | null;
 }
 
 export default UserModel;

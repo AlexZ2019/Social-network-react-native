@@ -10,12 +10,13 @@ import UserService from '../user/user.service';
 import User from '../user/entity/user.entity';
 import Token from './entities/token.entity';
 import { GoogleStrategy } from './strategies/google.strategy';
+import Friend from '../friend/entity/friend.entity';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
-    TypeOrmModule.forFeature([Token, User]),
+    TypeOrmModule.forFeature([Token, User, Friend]),
   ],
   providers: [
     AuthResolver,

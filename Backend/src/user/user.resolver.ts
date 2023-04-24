@@ -50,7 +50,7 @@ class UserResolver {
   }
 
   @Query(() => UsersModel)
-  // @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   async getUsers(
     @Args() args: UsersArgs,
     @Context() context,
@@ -60,6 +60,7 @@ class UserResolver {
       args.nickname,
       args.page,
       args.pageSize,
+      context.req.user.id,
     );
   }
 }

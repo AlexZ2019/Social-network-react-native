@@ -4,11 +4,14 @@ import User from './entity/user.entity';
 import { Like, Repository } from 'typeorm';
 import { IUserData } from './types';
 import AuthArgs from '../auth/dto/inputs.dto';
+import Friend from '../friend/entity/friend.entity';
 
 @Injectable()
 class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Friend)
+    private readonly friendRepository: Repository<Friend>,
   ) {}
   
   async getUserByEmailWithPassword(email: string) {
@@ -21,8 +24,7 @@ class UserService {
     return restUser;
   }
   
-  async getUsers(email = '', nickname = '', page = 1, pageSize = 10) {
-    console.log('email', email);
+  async getUsers(email = '', nickname = '', page = 1, pageSize = 10, userId) {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.userRepository.findAndCount({
@@ -32,11 +34,22 @@ class UserService {
       skip,
       take: pageSize,
     });
+    const friends = await this.friendRepository.findBy(
+      { user1: userId } || { user2: userId },
+    );
+    
     return {
-      users: result.map((user: User) => {
-        const { password, ...restUser } = user;
-        return restUser;
-      }),
+      users: result.reduce((users, user: User) => {
+        if (user.id === userId) {
+          return users;
+        } else {
+          const { password, ...restUser } = user;
+          const friendship = friends.find(
+            (friend) => user.id === friend.user1 || user.id === friend.user2,
+          );
+          return [...users, { ...restUser, isFriend: !!friendship }];
+        }
+      }, []),
       total,
     };
   }
