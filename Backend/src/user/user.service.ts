@@ -50,7 +50,7 @@ class UserService {
         }
       }, []),
       total,
-      pages: Math.floor(total / pageSize),
+      pages: Math.ceil(total / pageSize),
     };
   }
   

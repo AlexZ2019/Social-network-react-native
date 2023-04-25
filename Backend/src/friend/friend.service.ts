@@ -11,7 +11,7 @@ class FriendService {
     @InjectRepository(Friend)
     private readonly friendRepository: Repository<Friend>,
   ) {}
-  
+
   async getFriends(
     userId: number,
     email = '',
@@ -44,6 +44,7 @@ class FriendService {
         return { ...user, isFriend: true };
       }),
       total,
+      pages: Math.ceil(total / pageSize),
     };
   }
 }
