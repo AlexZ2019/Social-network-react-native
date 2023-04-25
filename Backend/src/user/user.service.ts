@@ -17,18 +17,18 @@ class UserService {
   async getUserByEmailWithPassword(email: string) {
     return this.userRepository.findOneBy({ email });
   }
-  
+
   async getUserByEmail(email: string) {
     const user = await this.userRepository.findOneBy({ email });
     const { password, ...restUser } = user;
     return restUser;
   }
-  
+
   async getUsers(email = '', nickname = '', page = 1, pageSize = 10, userId) {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.userRepository.findAndCount({
-      where: [{ email }, { nickname }],
+      where: email || nickname ? [{ email }, { nickname }] : {},
       skip,
       take: pageSize,
     });
@@ -36,6 +36,7 @@ class UserService {
       { user1: userId },
       { user2: userId },
     ]);
+    
     return {
       users: result.reduce((users, user: User) => {
         if (user.id === userId) {
@@ -49,6 +50,7 @@ class UserService {
         }
       }, []),
       total,
+      pages: Math.floor(total / pageSize),
     };
   }
   
