@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from './entity/user.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { IUserData } from './types';
 import AuthArgs from '../auth/dto/inputs.dto';
 import Friend from '../friend/entity/friend.entity';
@@ -13,7 +13,7 @@ class UserService {
     @InjectRepository(Friend)
     private readonly friendRepository: Repository<Friend>,
   ) {}
-  
+
   async getUserByEmailWithPassword(email: string) {
     return this.userRepository.findOneBy({ email });
   }
@@ -28,16 +28,14 @@ class UserService {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.userRepository.findAndCount({
-      where:
-        (nickname && { nickname: Like('%' + nickname + '%') }) ||
-        (email && { email: Like('%' + email + '%') }),
+      where: [{ email }, { nickname }],
       skip,
       take: pageSize,
     });
-    const friends = await this.friendRepository.findBy(
-      { user1: userId } || { user2: userId },
-    );
-    
+    const friends = await this.friendRepository.findBy([
+      { user1: userId },
+      { user2: userId },
+    ]);
     return {
       users: result.reduce((users, user: User) => {
         if (user.id === userId) {
