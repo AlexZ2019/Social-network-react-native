@@ -6,6 +6,9 @@ class UsersModel {
   @Field()
   total: number;
   
+  @Field()
+  pages: number;
+  
   @Field(() => [UserModel])
   users: UserModel[];
 }

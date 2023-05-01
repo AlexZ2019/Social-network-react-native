@@ -16,15 +16,11 @@ class FriendResolver {
     @InjectRepository(Token)
     private readonly tokenRepository: Repository<Token>,
   ) {}
-  
+
   @Query(() => UsersModel)
   @UseGuards(AccessTokenGuard)
   async getFriends(@Args() args: UsersArgs, @Context() context) {
-    return this.friendService.getFriends(
-      context.req.user.id,
-      args.email,
-      args.nickname,
-    );
+    return this.friendService.getFriends(context.req.user.id, args.searchValue);
   }
 }
 

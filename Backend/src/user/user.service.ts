@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from './entity/user.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { IUserData } from './types';
 import AuthArgs from '../auth/dto/inputs.dto';
 import Friend from '../friend/entity/friend.entity';
@@ -23,12 +23,17 @@ class UserService {
     const { password, ...restUser } = user;
     return restUser;
   }
-
-  async getUsers(email = '', nickname = '', page = 1, pageSize = 10, userId) {
+  
+  async getUsers(searchValue = '', page = 1, pageSize = 10, userId) {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.userRepository.findAndCount({
-      where: email || nickname ? [{ email }, { nickname }] : {},
+      where: searchValue
+        ? [
+          { email: Like(`${searchValue}%`) },
+          { nickname: Like(`${searchValue}%`) },
+        ]
+        : {},
       skip,
       take: pageSize,
     });

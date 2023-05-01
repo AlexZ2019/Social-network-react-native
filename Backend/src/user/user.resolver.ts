@@ -56,8 +56,7 @@ class UserResolver {
     @Context() context,
   ): Promise<UsersModel> {
     return this.userService.getUsers(
-      args.email,
-      args.nickname,
+      args.searchValue,
       args.page,
       args.pageSize,
       context.req.user.id,

@@ -10,8 +10,5 @@ export default class UsersArgs {
   pageSize: number;
   
   @Field({ nullable: true })
-  nickname: string;
-  
-  @Field({ nullable: true })
-  email: string;
+  searchValue: string;
 }

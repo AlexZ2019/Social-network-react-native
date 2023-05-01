@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import Friend from './entity/friend.entity';
 import User from '../user/entity/user.entity';
 
@@ -11,14 +11,8 @@ class FriendService {
     @InjectRepository(Friend)
     private readonly friendRepository: Repository<Friend>,
   ) {}
-
-  async getFriends(
-    userId: number,
-    email = '',
-    nickname = '',
-    page = 1,
-    pageSize = 10,
-  ) {
+  
+  async getFriends(userId: number, searchValue = '', page = 1, pageSize = 10) {
     const friends = await this.friendRepository.findBy([
       { user1: userId },
       { user2: userId },
@@ -34,7 +28,10 @@ class FriendService {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.userRepository.findAndCount({
-      where: [{ id: In(friendIds) }, { email }, { nickname }],
+      where: [
+        { id: In(friendIds), email: Like(`%${searchValue}%`) },
+        { id: In(friendIds), nickname: Like(`%${searchValue}%`) },
+      ],
       skip,
       take: pageSize,
     });
