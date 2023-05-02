@@ -2,15 +2,18 @@ import { Button, Card, Flex } from '@ant-design/react-native';
 import { Image, Text } from 'react-native';
 
 type Props = {
+  id: number;
   userImage?: string;
   nickname?: string;
   firstname?: string;
   lastname?: string;
   sex?: string;
   isFriend: boolean;
-  email: string
+  email: string;
+  onPress: (id: number) => void;
 }
 const UserMinimized = ({
+  id,
   userImage,
   nickname,
   firstname,
@@ -18,11 +21,12 @@ const UserMinimized = ({
   sex,
   isFriend,
   email,
+  onPress,
 }: Props) => {
   return (
     <Card>
       <Card.Body>
-        <Flex>
+        <Flex onPress={() => onPress(id)}>
           <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
             <Image style={{ width: 56, height: 56 }} source={userImage ||
               require('../../../../assets/user/default-avatar.png')}/>

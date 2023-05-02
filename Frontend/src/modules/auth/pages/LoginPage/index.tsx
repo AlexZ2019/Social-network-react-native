@@ -5,7 +5,7 @@ import {
   setTokensToAsyncStorage,
 } from '../../../../utils/asyncStorage';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { USER_QUERY } from '../../../user/graphql/queries/user';
+import { CURRENT_USER_QUERY } from '../../../user/graphql/queries/currentUser';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ILogin } from '../../types';
@@ -40,7 +40,7 @@ const LoginPage = () => {
     resolver: yupResolver(schema),
   });
   
-  const [fetchUser] = useLazyQuery(USER_QUERY);
+  const [fetchUser] = useLazyQuery(CURRENT_USER_QUERY);
   const onSubmit = async (data: ILogin): Promise<void> => {
     await login({ variables: data });
     const accessToken = await getAsyncStorageValue('accessToken');

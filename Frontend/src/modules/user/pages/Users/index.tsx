@@ -5,8 +5,12 @@ import UserMinimized from '../../components/UserMinimized';
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 import UserSearch from '../../components/UserSearch';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import constants from '../../constants';
 
 const Users = () => {
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [searchText, setSearchText] = useState<string>('');
   const [page, setPage] = useState(1);
   const { loading, data, fetchMore, refetch } = useQuery(USERS_QUERY);
@@ -21,6 +25,10 @@ const Users = () => {
   if (loading) {
     return <ActivityIndicator/>;
   }
+  const openProfile = (id: number) => {
+    navigation.navigate(constants.profile, { id });
+  };
+  
   return (
     <>
       <UserSearch searchText={searchText} setSearchText={setSearchText}
@@ -28,7 +36,8 @@ const Users = () => {
       <FlatList data={data?.getUsers?.users} renderItem={({ item }) => {
         return <UserMinimized isFriend={item.isFriend} email={item.email}
                               nickname={item.nickname} sex={item.sex}
-                              key={item.id}/>;
+                              key={item.id} onPress={openProfile}
+                              id={item.id}/>;
       }}/>
       {data?.getUsers?.pages > page &&
         <Button onPress={getMoreUsers}>Show More</Button>}
