@@ -23,7 +23,7 @@ class UserService {
     const { password, ...restUser } = user;
     return restUser;
   }
-  
+
   async getUsers(searchValue = '', page = 1, pageSize = 10, userId) {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
@@ -73,6 +73,12 @@ class UserService {
   
   async createGoogleUser(email) {
     return this.userRepository.insert({ email });
+  }
+  
+  async getUserById(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+    const { password, ...restUser } = user;
+    return restUser;
   }
 }
 

@@ -10,6 +10,7 @@ import UserArgs from './dto/user.dto';
 import AuthArgs from '../auth/dto/inputs.dto';
 import UsersArgs from './dto/users.dto';
 import UsersModel from './model/users.model';
+import GetUserArgs from './dto/getUser.dto';
 
 @Injectable()
 @Resolver()
@@ -61,6 +62,12 @@ class UserResolver {
       args.pageSize,
       context.req.user.id,
     );
+  }
+  
+  @Query(() => UserModel)
+  @UseGuards(AccessTokenGuard)
+  async getUser(@Args() args: GetUserArgs) {
+    return this.userService.getUserById(args.id);
   }
 }
 

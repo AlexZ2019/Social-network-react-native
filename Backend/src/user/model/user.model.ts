@@ -7,7 +7,7 @@ class UserModel {
 
   @Field()
   email: string;
-  
+
   @Field({ nullable: true })
   nickname: string;
   
@@ -19,6 +19,9 @@ class UserModel {
   
   @Field({ nullable: true })
   biography: string | null;
+  
+  @Field({ nullable: true })
+  sex: string | null;
   
   @Field({ nullable: true })
   isFriend?: boolean | null;
