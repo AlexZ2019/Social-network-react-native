@@ -6,16 +6,22 @@ import PostModel from './model/post.model';
 import PostArgs from './dto/post.dto';
 import EditPostArgs from './dto/editPost.dto';
 import DeletePostArgs from './dto/deletePost.dto';
+import GetPostsDto from './dto/getPosts.dto';
 
 @Injectable()
 @Resolver()
 @UseGuards(AccessTokenGuard)
 class PostResolver {
   constructor(private readonly postService: PostService) {}
-
+  
   @Query(() => [PostModel])
-  async getUserPosts(@Context() context): Promise<PostModel[]> {
-    const posts = await this.postService.getUserPosts(context.req.user.id);
+  async getUserPosts(
+    @Context() context,
+    @Args() args: GetPostsDto,
+  ): Promise<PostModel[]> {
+    const posts = await this.postService.getUserPosts(
+      args?.userId || context.req.user.id,
+    );
     if (posts.length) {
       return posts;
     } else {
@@ -25,7 +31,6 @@ class PostResolver {
   
   @Mutation(() => Boolean)
   async createPost(@Args() post: PostArgs, @Context() context) {
-    console.log('context.req.user.id', context.req.user.id);
     await this.postService.createPost({ ...post, userId: context.req.user.id });
     return true;
   }
