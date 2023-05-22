@@ -15,7 +15,6 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { USER_QUERY } from '../../graphql/queries/user';
-import constants from '../../constants';
 
 const Profile = () => {
   const { data: currentUser } = useQuery(CURRENT_USER_QUERY);
@@ -52,7 +51,7 @@ const Profile = () => {
       routes.
       find((route => route.name === currentRoute.params?.pageToGoBack));
     route ? navigation.navigate(route) : navigation.goBack();
-    navigation.setParams({ id: null });
+    navigation.setParams({ id: undefined });
   };
   
   if (!currentUser || isUserLoad) {
@@ -71,7 +70,7 @@ const Profile = () => {
                         loading={loading}/>
         : <UserInfo user={user}/>}
       {!data?.getUser && <CreatePost/>}
-      <Posts isEditable/>
+      <Posts userId={userId}/>
     </>
   );
 };

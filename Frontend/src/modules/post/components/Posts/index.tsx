@@ -6,11 +6,16 @@ import { ActivityIndicator } from '@ant-design/react-native';
 import * as React from 'react';
 
 type Props = {
-  isEditable?: boolean
+  userId: number | undefined
 }
 
-const Posts = ({ isEditable }: Props) => {
-  const { data, loading } = useQuery(GET_POSTS);
+const Posts = ({ userId }: Props) => {
+  const { data, loading } = useQuery(GET_POSTS, {
+    variables: {
+      userId,
+    },
+  });
+  
   if (loading) {
     return <ActivityIndicator/>;
   }
@@ -20,7 +25,7 @@ const Posts = ({ isEditable }: Props) => {
       data={data.getUserPosts}
       renderItem={({ item }: any) => {
         return <Post text={item.text} media={item.media}
-                     key={item.id} id={item.id} isEditable={isEditable}/>;
+                     key={item.id} id={item.id} isEditable={!userId}/>;
       }}
     />
   );
