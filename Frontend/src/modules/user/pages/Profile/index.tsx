@@ -23,7 +23,7 @@ const Profile = () => {
   const currentRoute = useRoute();
   // @ts-ignore
   const userId = currentRoute.params?.id;
-  const user = data?.getUser || currentUser;
+  const user = data?.getUser || currentUser.getCurrentUser;
   const [isEditProfile, setIsEditProfile] = useState<Boolean>(false);
   const [editUser, { loading }] = useMutation(EDIT_USER_MUTATION);
   
@@ -41,8 +41,8 @@ const Profile = () => {
   const goBack = () => {
     const route = navigation.getState()?.
       routes.
-      find((route => route.name === currentRoute.params.pageToGoBack));
-    navigation.navigate(route);
+      find((route => route.name === currentRoute.params?.pageToGoBack));
+    route ? navigation.navigate(route) : navigation.goBack();
   };
   
   if (!currentUser || isUserLoad) {
