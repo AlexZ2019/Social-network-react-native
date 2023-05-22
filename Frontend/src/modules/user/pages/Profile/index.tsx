@@ -10,26 +10,35 @@ import Posts from '../../../post/components/Posts';
 import CreatePost from '../../../post/components/CreatePost';
 import { ActivityIndicator, Button } from '@ant-design/react-native';
 import {
+  useIsFocused,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import { USER_QUERY } from '../../graphql/queries/user';
+import constants from '../../constants';
 
 const Profile = () => {
   const { data: currentUser } = useQuery(CURRENT_USER_QUERY);
-  const [fetch, { loading: isUserLoad, data }] = useLazyQuery(USER_QUERY,
-    { fetchPolicy: 'no-cache' });
+  const [fetch, { loading: isUserLoad, data }] = useLazyQuery(USER_QUERY);
   const navigation = useNavigation();
   const currentRoute = useRoute();
+  const isFocusedScreen = useIsFocused();
   // @ts-ignore
   const userId = currentRoute.params?.id;
-  const user = data?.getUser || currentUser.getCurrentUser;
+  const user = userId && data?.getUser || currentUser?.getCurrentUser;
   const [isEditProfile, setIsEditProfile] = useState<Boolean>(false);
   const [editUser, { loading }] = useMutation(EDIT_USER_MUTATION);
   
   useEffect(() => {
     fetch({ variables: { id: userId } });
   }, [userId]);
+  
+  useEffect(() => {
+    if (!isFocusedScreen) {
+      navigation.setParams({ id: null });
+    }
+  }, [isFocusedScreen]);
+  
   const onSubmit = async (data: IUserInfo): Promise<void> => {
     await editUser({
       variables: data, onCompleted: () => {
@@ -43,6 +52,7 @@ const Profile = () => {
       routes.
       find((route => route.name === currentRoute.params?.pageToGoBack));
     route ? navigation.navigate(route) : navigation.goBack();
+    navigation.setParams({ id: null });
   };
   
   if (!currentUser || isUserLoad) {
