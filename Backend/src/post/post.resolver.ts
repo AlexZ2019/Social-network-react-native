@@ -2,11 +2,11 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import PostService from './post.service';
 import { Injectable, UseGuards } from '@nestjs/common';
 import AccessTokenGuard from '../auth/guards/accessToken.guard';
-import PostModel from './model/post.model';
 import PostArgs from './dto/post.dto';
 import EditPostArgs from './dto/editPost.dto';
 import DeletePostArgs from './dto/deletePost.dto';
 import GetPostsDto from './dto/getPosts.dto';
+import PostsModel from './model/posts.model';
 
 @Injectable()
 @Resolver()
@@ -14,19 +14,16 @@ import GetPostsDto from './dto/getPosts.dto';
 class PostResolver {
   constructor(private readonly postService: PostService) {}
   
-  @Query(() => [PostModel])
+  @Query(() => PostsModel)
   async getUserPosts(
     @Context() context,
     @Args() args: GetPostsDto,
-  ): Promise<PostModel[]> {
-    const posts = await this.postService.getUserPosts(
+  ): Promise<PostsModel> {
+    return this.postService.getUserPosts(
       args?.userId || context.req.user.id,
+      args.page,
+      args.pageSize,
     );
-    if (posts.length) {
-      return posts;
-    } else {
-      return [];
-    }
   }
   
   @Mutation(() => Boolean)
