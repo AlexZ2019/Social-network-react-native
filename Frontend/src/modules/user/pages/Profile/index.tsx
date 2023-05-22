@@ -60,7 +60,7 @@ const Profile = () => {
         ? <EditUserForm user={currentUser.getCurrentUser} onSubmit={onSubmit}
                         loading={loading}/>
         : <UserInfo user={user}/>}
-      <CreatePost/>
+      {!data?.getUser && <CreatePost/>}
       <Posts isEditable/>
     </>
   );
