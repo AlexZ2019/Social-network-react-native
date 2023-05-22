@@ -20,9 +20,9 @@ const Profile = () => {
   const [fetch, { loading: isUserLoad, data }] = useLazyQuery(USER_QUERY,
     { fetchPolicy: 'no-cache' });
   const navigation = useNavigation();
-  const route = useRoute();
+  const currentRoute = useRoute();
   // @ts-ignore
-  const userId = route.params?.id;
+  const userId = currentRoute.params?.id;
   const user = data?.getUser || currentUser;
   const [isEditProfile, setIsEditProfile] = useState<Boolean>(false);
   const [editUser, { loading }] = useMutation(EDIT_USER_MUTATION);
@@ -39,8 +39,10 @@ const Profile = () => {
   };
   
   const goBack = () => {
-    const routes = navigation.getState()?.routes;
-    navigation.navigate(routes[1].name);
+    const route = navigation.getState()?.
+      routes.
+      find((route => route.name === currentRoute.params.pageToGoBack));
+    navigation.navigate(route);
   };
   
   if (!currentUser || isUserLoad) {
