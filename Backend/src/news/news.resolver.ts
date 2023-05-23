@@ -15,7 +15,6 @@ class NewsResolver {
     @InjectRepository(Token)
     private readonly tokenRepository: Repository<Token>,
   ) {}
-  
 }
 
 export default NewsResolver;
