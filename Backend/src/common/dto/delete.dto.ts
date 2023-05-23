@@ -2,7 +2,7 @@ import { ArgsType, Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 @ArgsType()
-export default class DeletePostArgs {
-  @Field({ nullable: true })
+export default class DeleteArgs {
+  @Field()
   id: number;
 }
