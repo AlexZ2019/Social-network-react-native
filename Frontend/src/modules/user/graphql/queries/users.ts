@@ -6,12 +6,14 @@ export const USERS_QUERY = gql`
             total
             pages
             users {
-                email
-                birthday
                 id
                 nickname
                 status
                 isFriend
+                sex
+                email
+                birthday
+                biography
             }
         }
     }

@@ -1,8 +1,12 @@
-import { DocumentNode, TypedDocumentNode, useQuery } from '@apollo/client';
-import { ActivityIndicator, Button } from '@ant-design/react-native';
+import {
+  DocumentNode,
+  NetworkStatus,
+  TypedDocumentNode,
+  useQuery,
+} from '@apollo/client';
 import UserMinimized from '../../components/UserMinimized';
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import UserSearch from '../../components/UserSearch';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -15,20 +19,21 @@ type Props = {
 const Users = ({ query, pageName }: Props) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [searchText, setSearchText] = useState<string>('');
-  const [page, setPage] = useState(1);
-  const { loading, data, fetchMore, refetch } = useQuery(query);
+  const [page, setPage] = useState<number>(1);
+  const { loading, data, fetchMore, refetch, networkStatus } = useQuery(query);
   const userData = data?.getUsers || data?.getFriends;
   const getMoreUsers = async () => {
-    setPage((prevState) => prevState + 1);
-    if (searchText) {
-      await fetchMore({ variables: { page, searchValue: searchText } });
-    } else {
-      await fetchMore({ variables: { page } });
+    if (page < userData.pages) {
+      setPage(prevState => prevState + 1);
+      if (searchText) {
+        await fetchMore(
+          { variables: { page: page + 1, searchValue: searchText } });
+      } else {
+        await fetchMore({ variables: { page: page + 1 } });
+      }
     }
   };
-  if (loading) {
-    return <ActivityIndicator/>;
-  }
+  
   const openProfile = (id: number) => {
     navigation.navigate(constants.profile, { id, pageToGoBack: pageName });
   };
@@ -37,14 +42,18 @@ const Users = ({ query, pageName }: Props) => {
     <>
       <UserSearch searchText={searchText} setSearchText={setSearchText}
                   refetchUsers={refetch}/>
-      <FlatList data={userData?.users} renderItem={({ item }) => {
-        return <UserMinimized isFriend={item.isFriend} email={item.email}
-                              nickname={item.nickname} sex={item.sex}
-                              key={item.id} onPress={openProfile}
-                              id={item.id}/>;
-      }}/>
-      {userData?.pages > page &&
-        <Button onPress={getMoreUsers}>Show More</Button>}
+      <FlatList data={userData?.users}
+                onEndReached={getMoreUsers}
+                onEndReachedThreshold={0.25}
+                renderItem={({ item }) => {
+                  return <UserMinimized isFriend={item.isFriend}
+                                        email={item.email}
+                                        nickname={item.nickname} sex={item.sex}
+                                        key={item.id} onPress={openProfile}
+                                        id={item.id}/>;
+                }}/>
+      <ActivityIndicator animating={networkStatus === NetworkStatus.fetchMore
+        || loading}/>
     </>
   );
   

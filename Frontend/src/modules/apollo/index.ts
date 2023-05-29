@@ -95,7 +95,21 @@ export const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
-        fields: {},
+        fields: {
+          getUsers: {
+            keyArgs: false,
+            merge(existing, incoming) {
+              if (existing) {
+                return {
+                  pages: existing.pages, total: existing.total,
+                  users: [...existing.users, ...incoming.users],
+                };
+              } else {
+                return incoming;
+              }
+            },
+          },
+        },
       },
     },
   }),
