@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from './entity/user.entity';
-import { Like, Repository } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import { IUserData } from './types';
 import AuthArgs from '../auth/dto/inputs.dto';
 import Friend from '../friend/entity/friend.entity';
@@ -33,7 +33,7 @@ class UserService {
           { email: Like(`${searchValue}%`) },
           { nickname: Like(`${searchValue}%`) },
         ]
-        : {},
+        : { id: Not(userId) },
       skip,
       take: pageSize,
     });
@@ -41,18 +41,14 @@ class UserService {
       { user1: userId },
       { user2: userId },
     ]);
-    
+
     return {
       users: result.reduce((users, user: User) => {
-        if (user.id === userId) {
-          return users;
-        } else {
-          const { password, ...restUser } = user;
-          const friendship = friends.find(
-            (friend) => user.id === friend.user1 || user.id === friend.user2,
-          );
-          return [...users, { ...restUser, isFriend: !!friendship }];
-        }
+        const { password, ...restUser } = user;
+        const friendship = friends.find(
+          (friend) => user.id === friend.user1 || user.id === friend.user2,
+        );
+        return [...users, { ...restUser, isFriend: !!friendship }];
       }, []),
       total,
       pages: Math.ceil(total / pageSize),
