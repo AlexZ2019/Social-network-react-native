@@ -9,9 +9,9 @@ import React from 'react';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_POSTS } from '../../graphql/queries/getPosts';
+import { useMutation } from '@apollo/client';
 import { EDIT_POST } from '../../graphql/mutations/editPost';
+import { GET_POSTS } from '../../graphql/queries/getPosts';
 
 const schema = yup.object().shape({
   text: yup.string(),
@@ -33,10 +33,24 @@ const EditPost = ({ text, id }: Props) => {
   });
   
   const [editPost, { loading }] = useMutation(EDIT_POST);
-  const { fetchMore } = useQuery(GET_POSTS);
   const onSubmit = async (data) => {
-    await editPost({ variables: { text: data.text, id } });
-    await fetchMore({});
+    await editPost({
+      variables: { text: data.text, id },
+      update(cache) {
+        cache.modify({
+          query: GET_POSTS,
+          fields: {
+            getUserPosts(existingPosts) {
+              const editedPost = { ...data, id };
+              return {
+                ...existingPosts,
+                posts: { ...existingPosts.posts, ...editedPost },
+              };
+            },
+          },
+        });
+      },
+    });
     modal.hideModal();
   };
   return (
