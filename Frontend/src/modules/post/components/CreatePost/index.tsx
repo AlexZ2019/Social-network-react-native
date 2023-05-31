@@ -10,7 +10,7 @@ import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_POSTS } from '../../graphql/mutations/createPost';
+import { CREATE_POST } from '../../graphql/mutations/createPost';
 import { GET_POSTS } from '../../graphql/queries/getPosts';
 
 const schema = yup.object().shape({
@@ -26,7 +26,7 @@ const CreatePost = () => {
     resolver: yupResolver(schema),
   });
   
-  const [createPost, { loading }] = useMutation(CREATE_POSTS);
+  const [createPost, { loading }] = useMutation(CREATE_POST);
   const { fetchMore } = useQuery(GET_POSTS);
   const onSubmit = async (data) => {
     await createPost({ variables: data });
