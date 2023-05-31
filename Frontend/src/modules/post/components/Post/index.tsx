@@ -1,7 +1,8 @@
-import React from 'react';
-import { Card, View, Text, Flex } from '@ant-design/react-native';
+import React, { useState } from 'react';
+import { Card, View, Text, Flex, Icon } from '@ant-design/react-native';
 import DeletePost from '../DeletePost';
 import EditPost from '../EditPost';
+import Comments from '../../../comment/components/Comments';
 
 type Props = {
   id: number;
@@ -24,30 +25,31 @@ const headStyles = {
 };
 
 const Post = ({ media, text, id, isEditable }: Props) => {
-  
+  const [commentsShow, setCommentsShow] = useState<boolean>(false);
   return (
-    <Card style={postStyle}>
-      <Flex justify="between" style={headStyles}>
-        <View>
-          Post
-        </View>
-        {isEditable &&
+    <>
+      <Card style={postStyle}>
+        <Flex justify="between" style={headStyles}>
           <View>
-            <EditPost text={text} id={id}/>
-            <DeletePost id={id}/>
+            Post
           </View>
-        }
-      </Flex>
-      <Card.Body>
-        <View style={{ height: 42 }}>
-          <Text style={{ marginLeft: 16 }}>{text}</Text>
-        </View>
-      </Card.Body>
-      <Card.Footer
-        content="footer content"
-        extra="footer extra content"
-      />
-    </Card>
+          {isEditable &&
+            <View>
+              <EditPost text={text} id={id}/>
+              <DeletePost id={id}/>
+            </View>
+          }
+        </Flex>
+        <Card.Body>
+          <View style={{ height: 42 }}>
+            <Text style={{ marginLeft: 16 }}>{text}</Text>
+          </View>
+        </Card.Body>
+        <Icon name="message" onPress={() => setCommentsShow(!commentsShow)}/>
+      </Card>
+      {commentsShow && <Comments postId={id}/>}
+    </>
+  
   );
 };
 

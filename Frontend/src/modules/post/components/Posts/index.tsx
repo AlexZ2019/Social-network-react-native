@@ -18,10 +18,6 @@ const Posts = ({ userId }: Props) => {
     },
   });
   
-  if (loading) {
-    return <ActivityIndicator/>;
-  }
-  
   const getMorePosts = async () => {
     if (page < data?.getUserPosts.pages) {
       setPage(prevState => prevState + 1);
