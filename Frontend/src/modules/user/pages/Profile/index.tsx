@@ -34,7 +34,7 @@ const Profile = () => {
   
   useEffect(() => {
     if (!isFocusedScreen) {
-      navigation.setParams({ id: null });
+      navigation.setParams({ id: undefined });
     }
   }, [isFocusedScreen]);
   
