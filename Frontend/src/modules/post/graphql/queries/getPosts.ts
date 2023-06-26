@@ -9,6 +9,9 @@ export const GET_POSTS = gql`
                 id
                 media
                 text
+                name
+                nickname
+                like
             }
         }
     }

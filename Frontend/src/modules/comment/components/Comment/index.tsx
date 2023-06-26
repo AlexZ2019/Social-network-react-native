@@ -60,7 +60,6 @@ const Comment = ({
         </Card.Body>
       </Card>
     </>
-  
   );
 };
 

@@ -7,10 +7,10 @@ import Comments from '../../../comment/components/Comments';
 type Props = {
   id: number;
   text: string;
-  firstname?: string;
-  lastname?: string;
+  name: string | null;
+  nickname: string | null;
   media: string;
-  isEditable?: boolean
+  isEditable?: boolean;
 }
 
 const postStyle = {
@@ -24,14 +24,14 @@ const headStyles = {
   padding: 15,
 };
 
-const Post = ({ media, text, id, isEditable }: Props) => {
+const Post = ({ media, text, id, isEditable, name, nickname }: Props) => {
   const [commentsShow, setCommentsShow] = useState<boolean>(false);
   return (
     <>
       <Card style={postStyle}>
         <Flex justify="between" style={headStyles}>
           <View>
-            Post
+            {name || nickname || 'Post'}
           </View>
           {isEditable &&
             <View>

@@ -11,4 +11,13 @@ export default class Post extends BaseEntity {
   
   @Column()
   text: string;
+  
+  @Column()
+  name: string;
+  
+  @Column()
+  nickname: string;
+  
+  @Column()
+  like: number;
 }

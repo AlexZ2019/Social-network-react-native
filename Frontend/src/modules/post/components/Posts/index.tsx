@@ -5,6 +5,7 @@ import Post from '../Post';
 import { ActivityIndicator } from '@ant-design/react-native';
 import * as React from 'react';
 import { useState } from 'react';
+import { PostType } from '../../types';
 
 type Props = {
   userId: number | undefined
@@ -31,9 +32,11 @@ const Posts = ({ userId }: Props) => {
         data={data?.getUserPosts.posts}
         onEndReached={getMorePosts}
         onEndReachedThreshold={0.25}
-        renderItem={({ item }: any) => {
+        renderItem={({ item }: PostType) => {
           return <Post text={item.text} media={item.media}
-                       key={item.id} id={item.id} isEditable={!userId}/>;
+                       key={item.id} id={item.id} isEditable={!userId}
+                       name={item.name} nickname={item.nickname}
+          />;
         }}
       />
       <ActivityIndicator animating={networkStatus === NetworkStatus.fetchMore

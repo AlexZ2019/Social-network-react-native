@@ -7,13 +7,17 @@ import EditPostArgs from './dto/editPost.dto';
 import GetPostsDto from './dto/getPosts.dto';
 import PostsModel from './model/posts.model';
 import DeleteArgs from '../common/dto/delete.dto';
+import UserService from '../user/user.service';
 
 @Injectable()
 @Resolver()
 @UseGuards(AccessTokenGuard)
 class PostResolver {
-  constructor(private readonly postService: PostService) {}
-
+  constructor(
+    private readonly postService: PostService,
+    private readonly userService: UserService,
+  ) {}
+  
   @Query(() => PostsModel)
   async getUserPosts(
     @Context() context,
@@ -28,7 +32,13 @@ class PostResolver {
   
   @Mutation(() => Boolean)
   async createPost(@Args() post: PostArgs, @Context() context) {
-    await this.postService.createPost({ ...post, userId: context.req.user.id });
+    const user = await this.userService.getUserById(context.req.user.id);
+    await this.postService.createPost({
+      ...post,
+      userId: context.req.user.id,
+      name: `${user.firstname} ${user.lastname}` || null,
+      nickname: user.nickname || null,
+    });
     return true;
   }
   
