@@ -14,7 +14,7 @@ class CommentModel {
   @Field()
   text: string;
   
-  @Field()
+  @Field({ nullable: true })
   like: number;
 }
 

@@ -5,12 +5,11 @@ import Comment from '../Comment';
 import { ActivityIndicator } from '@ant-design/react-native';
 import * as React from 'react';
 import { useState } from 'react';
+import CreateComment from '../AddComment';
+import { CommentsProps } from '../../types';
+import { CURRENT_USER_QUERY } from '../../../user/graphql/queries/currentUser';
 
-type Props = {
-  postId: number | undefined
-}
-
-const Comments = ({ postId }: Props) => {
+const Comments = ({ postId }: CommentsProps) => {
   const [part, setPart] = useState<number>(1);
   const { data, loading, fetchMore, networkStatus } = useQuery(GET_COMMENTS, {
     variables: {
@@ -18,8 +17,10 @@ const Comments = ({ postId }: Props) => {
     },
   });
   
+  const { data: currentUser } = useQuery(CURRENT_USER_QUERY);
+  const userId = currentUser.getCurrentUser.id;
   const getMoreComments = async () => {
-    if (part < data?.getUserPosts.parts) {
+    if (part < data?.getComments.parts) {
       setPart(prevState => prevState + 1);
       await fetchMore({ variables: { part: part + 1, postId } });
     }
@@ -27,13 +28,15 @@ const Comments = ({ postId }: Props) => {
   
   return (
     <>
+      <CreateComment postId={postId}/>
       <FlatList
         data={data?.getComments.comments}
         onEndReached={getMoreComments}
         onEndReachedThreshold={0.25}
         renderItem={({ item }: any) => {
-          return <Comment text={item.text} media={item.media}
-                          key={item.id} id={item.id} isEditable={!postId}/>;
+          return <Comment text={item.text} media={item.media} postId={postId}
+                          key={item.id} id={item.id}
+                          isEditable={userId === item.userId}/>;
         }}
       />
       <ActivityIndicator animating={networkStatus === NetworkStatus.fetchMore
