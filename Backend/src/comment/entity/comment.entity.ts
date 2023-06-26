@@ -13,5 +13,12 @@ export default class Comment extends BaseEntity {
   text: string;
   
   @Column()
+  name: string;
+  
+  @Column()
+  nickname: string;
+  
+  @Column()
   like: number;
+  
 }

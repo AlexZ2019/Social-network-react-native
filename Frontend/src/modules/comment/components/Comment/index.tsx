@@ -7,10 +7,10 @@ type Props = {
   id: number;
   postId: number;
   text: string;
-  firstname?: string;
-  lastname?: string;
+  name: string | null;
   media: string;
-  isEditable?: boolean
+  isEditable?: boolean,
+  nickname: string | null
 }
 
 const postStyle = {
@@ -24,7 +24,15 @@ const headStyles = {
   padding: 15,
 };
 
-const Comment = ({ media, text, id, isEditable, postId }: Props) => {
+const Comment = ({
+  media,
+  text,
+  id,
+  isEditable,
+  postId,
+  name,
+  nickname,
+}: Props) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   
   return (
@@ -43,7 +51,10 @@ const Comment = ({ media, text, id, isEditable, postId }: Props) => {
             {isEdit ?
               <EditComment text={text} id={id} postId={postId}
                            setIsEdit={setIsEdit}/>
-              : <Text style={{ marginLeft: 16 }}>{text}</Text>
+              : <>
+                <Text>{name || nickname}</Text>
+                <Text style={{ marginLeft: 16 }}>{text}</Text>
+              </>
             }
           </View>
         </Card.Body>

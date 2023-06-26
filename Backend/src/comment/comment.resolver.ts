@@ -7,12 +7,16 @@ import GetCommentsDto from './dto/getComments.dto';
 import CommentsModel from './model/comments.model';
 import CommentArgs from './dto/comment.dto';
 import DeleteArgs from '../common/dto/delete.dto';
+import UserService from '../user/user.service';
 
 @Injectable()
 @Resolver()
 @UseGuards(AccessTokenGuard)
 class CommentResolver {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(
+    private readonly commentService: CommentService,
+    private readonly userService: UserService,
+  ) {}
   
   @Query(() => CommentsModel)
   async getComments(
@@ -24,9 +28,12 @@ class CommentResolver {
   
   @Mutation(() => Boolean)
   async createComment(@Args() comment: CommentArgs, @Context() context) {
+    const user = await this.userService.getUserById(context.req.user.id);
     await this.commentService.createComment({
       ...comment,
       userId: context.req.user.id,
+      name: `${user.firstname} ${user.lastname}` || null,
+      nickname: user.nickname || null,
     });
     return true;
   }

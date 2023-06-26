@@ -10,6 +10,8 @@ export const GET_COMMENTS = gql`
                 text
                 postId
                 userId
+                name
+                nickname
                 like
             }
         }

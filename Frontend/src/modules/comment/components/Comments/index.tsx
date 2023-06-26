@@ -6,7 +6,7 @@ import { ActivityIndicator } from '@ant-design/react-native';
 import * as React from 'react';
 import { useState } from 'react';
 import CreateComment from '../AddComment';
-import { CommentsProps } from '../../types';
+import { CommentsProps, CommentType } from '../../types';
 import { CURRENT_USER_QUERY } from '../../../user/graphql/queries/currentUser';
 
 const Comments = ({ postId }: CommentsProps) => {
@@ -33,10 +33,12 @@ const Comments = ({ postId }: CommentsProps) => {
         data={data?.getComments.comments}
         onEndReached={getMoreComments}
         onEndReachedThreshold={0.25}
-        renderItem={({ item }: any) => {
+        renderItem={({ item }: CommentType) => {
           return <Comment text={item.text} media={item.media} postId={postId}
-                          key={item.id} id={item.id}
-                          isEditable={userId === item.userId}/>;
+                          key={item.id} id={item.id} name={item.name}
+                          nickname={item.nickname}
+                          isEditable={userId === item.userId}
+                          like={item.like}/>;
         }}
       />
       <ActivityIndicator animating={networkStatus === NetworkStatus.fetchMore

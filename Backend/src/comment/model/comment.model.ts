@@ -15,6 +15,12 @@ class CommentModel {
   text: string;
   
   @Field({ nullable: true })
+  name: string;
+  
+  @Field({ nullable: true })
+  nickname: string;
+  
+  @Field({ nullable: true })
   like: number;
 }
 
