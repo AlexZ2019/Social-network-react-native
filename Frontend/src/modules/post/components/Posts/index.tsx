@@ -33,9 +33,10 @@ const Posts = ({ userId }: Props) => {
         onEndReached={getMorePosts}
         onEndReachedThreshold={0.25}
         renderItem={({ item }: PostType) => {
-          return <Post text={item.text} media={item.media}
+          return <Post text={item.text} media={item.media} userId={userId}
                        key={item.id} id={item.id} isEditable={!userId}
                        name={item.name} nickname={item.nickname}
+                       like={item.like}
           />;
         }}
       />

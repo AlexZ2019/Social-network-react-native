@@ -16,7 +16,6 @@ const Comments = ({ postId }: CommentsProps) => {
       postId,
     },
   });
-  
   const { data: currentUser } = useQuery(CURRENT_USER_QUERY);
   const userId = currentUser.getCurrentUser.id;
   const getMoreComments = async () => {
@@ -33,12 +32,13 @@ const Comments = ({ postId }: CommentsProps) => {
         data={data?.getComments.comments}
         onEndReached={getMoreComments}
         onEndReachedThreshold={0.25}
-        renderItem={({ item }: CommentType) => {
+        renderItem={(item: CommentType) => {
           return <Comment text={item.text} media={item.media} postId={postId}
                           key={item.id} id={item.id} name={item.name}
-                          nickname={item.nickname}
+                          nickname={item.nickname} userId={item.userId}
                           isEditable={userId === item.userId}
-                          like={item.like}/>;
+                          like={item.like}
+          />;
         }}
       />
       <ActivityIndicator animating={networkStatus === NetworkStatus.fetchMore

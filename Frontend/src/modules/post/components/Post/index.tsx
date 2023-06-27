@@ -3,13 +3,12 @@ import { Card, View, Text, Flex, Icon } from '@ant-design/react-native';
 import DeletePost from '../DeletePost';
 import EditPost from '../EditPost';
 import Comments from '../../../comment/components/Comments';
+import constants from '../../../user/constants';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { PostType } from '../../types';
 
-type Props = {
-  id: number;
-  text: string;
-  name: string | null;
-  nickname: string | null;
-  media: string;
+type Props = PostType & {
   isEditable?: boolean;
 }
 
@@ -24,13 +23,26 @@ const headStyles = {
   padding: 15,
 };
 
-const Post = ({ media, text, id, isEditable, name, nickname }: Props) => {
+const Post = ({
+  media,
+  text,
+  id,
+  isEditable,
+  name,
+  nickname,
+  userId,
+}: Props) => {
   const [commentsShow, setCommentsShow] = useState<boolean>(false);
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const openProfile = (id: number) => {
+    navigation.navigate(constants.profile, { id });
+  };
+  
   return (
     <>
       <Card style={postStyle}>
         <Flex justify="between" style={headStyles}>
-          <View>
+          <View onPress={() => openProfile(userId)}>
             {name || nickname || 'Post'}
           </View>
           {isEditable &&

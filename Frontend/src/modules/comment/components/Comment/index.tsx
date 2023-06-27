@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Card, View, Text, Flex, Icon } from '@ant-design/react-native';
-import DeletePost from '../DeleteComment';
 import EditComment from '../EditComment';
+import { CommentType } from '../../types';
+import constants from '../../../user/constants';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import DeleteComment from '../DeleteComment';
 
-type Props = {
-  id: number;
-  postId: number;
-  text: string;
-  name: string | null;
-  media: string;
+type Props = CommentType & {
   isEditable?: boolean,
-  nickname: string | null
 }
 
 const postStyle = {
@@ -32,9 +30,13 @@ const Comment = ({
   postId,
   name,
   nickname,
+  userId,
 }: Props) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const openProfile = (id: number) => {
+    navigation.navigate(constants.profile, { id });
+  };
   return (
     <>
       <Card style={postStyle}>
@@ -42,7 +44,7 @@ const Comment = ({
           {isEditable &&
             <View>
               <Icon name="edit" onPress={() => setIsEdit(!isEdit)}/>
-              <DeletePost id={id}/>
+              <DeleteComment id={id}/>
             </View>
           }
         </Flex>
@@ -52,7 +54,8 @@ const Comment = ({
               <EditComment text={text} id={id} postId={postId}
                            setIsEdit={setIsEdit}/>
               : <>
-                <Text>{name || nickname}</Text>
+                <Text onPress={() => openProfile(userId)}>{name || nickname ||
+                  'Post'}</Text>
                 <Text style={{ marginLeft: 16 }}>{text}</Text>
               </>
             }
