@@ -1,5 +1,5 @@
 export type CommentsProps = {
-  postId: number | undefined;
+  postId: number;
 }
 
 export type CommentType = {
