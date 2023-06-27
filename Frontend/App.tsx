@@ -15,13 +15,15 @@ import NotAuthRouteWrapper
 import { ApolloProvider } from '@apollo/client';
 import { client } from './src/modules/apollo';
 import constants from './src/modules/News/constants';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StatusBar } from 'react-native';
 import React from 'react';
 import en_US from '@ant-design/react-native/lib/locale-provider/en_US';
 import { Provider } from '@ant-design/react-native';
+import 'react-native-gesture-handler';
+import { createStackNavigator } from '@react-navigation/stack';
+import Navigation from './src/modules/common/components/Navigation';
 
-const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   const [isLoaded] = useFonts({
@@ -38,33 +40,33 @@ export default function App() {
         <Provider locale={en_US}>
           <StatusBar/>
           <NavigationContainer>
-            <Drawer.Navigator initialRouteName={constants.news}>
+            <Stack.Navigator initialRouteName={constants.news}>
               {modules.routes.map((route: IRoute, index) => {
                 switch (route.type) {
                   case RouteType.NotAuth:
                     return (
-                      <Drawer.Screen key={index} name={route.path}
-                                     options={{
-                                       headerShown: false,
-                                       drawerItemStyle: { display: 'none' },
-                                     }}
-                                     children={() => (
-                                       <NotAuthRouteWrapper>{route.page}</NotAuthRouteWrapper>
-                                     )}/>
+                      <Stack.Screen key={index} name={route.path}
+                                    options={{ headerShown: false }}
+                                    children={() => (
+                                      <NotAuthRouteWrapper>{route.page}</NotAuthRouteWrapper>
+                                    )}/>
                     );
                   case RouteType.Auth:
                     return (
-                      <Drawer.Screen key={index} name={route.path}
-                                     children={() => (
-                                       <PrivetRouteWrapper>{route.page}</PrivetRouteWrapper>
-                                     )}/>
+                      <Stack.Screen key={index} name={route.path}
+                                    children={() => (
+                                      <>
+                                        <PrivetRouteWrapper>{route.page}</PrivetRouteWrapper>
+                                        <Navigation tab={route.path}/>
+                                      </>
+                                    )}/>
                     );
                   default:
-                    return <Drawer.Screen key={index} name={route.path}
-                                          children={() => route.page}/>;
+                    return <Stack.Screen key={index} name={route.path}
+                                         children={() => route.page}/>;
                 }
               })}
-            </Drawer.Navigator>
+            </Stack.Navigator>
           </NavigationContainer>
         </Provider>
       </UserProvider>

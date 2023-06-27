@@ -32,12 +32,6 @@ const Profile = () => {
     fetch({ variables: { id: userId } });
   }, [userId]);
   
-  useEffect(() => {
-    if (!isFocusedScreen) {
-      navigation.setParams({ id: undefined });
-    }
-  }, [isFocusedScreen]);
-  
   const onSubmit = async (data: IUserInfo): Promise<void> => {
     await editUser({
       variables: data, onCompleted: () => {
@@ -46,20 +40,11 @@ const Profile = () => {
     });
   };
   
-  const goBack = () => {
-    const route = navigation.getState()?.
-      routes.
-      find((route => route.name === currentRoute.params?.pageToGoBack));
-    route ? navigation.navigate(route) : navigation.goBack();
-    navigation.setParams({ id: undefined });
-  };
-  
   if (!currentUser || isUserLoad) {
     return <ActivityIndicator/>;
   }
   return (
     <>
-      {data?.getUser && <Button onPress={goBack}>Go Back</Button>}
       <ProfileHeader nickname={user?.nickname}
                      email={user?.email}
                      serIsEditProfile={setIsEditProfile}

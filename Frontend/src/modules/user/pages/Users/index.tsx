@@ -6,7 +6,7 @@ import {
 } from '@apollo/client';
 import UserMinimized from '../../components/UserMinimized';
 import React, { useState } from 'react';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { ActivityIndicator, FlatList } from 'react-native';
 import UserSearch from '../../components/UserSearch';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -35,7 +35,7 @@ const Users = ({ query, pageName }: Props) => {
   };
   
   const openProfile = (id: number) => {
-    navigation.navigate(constants.profile, { id, pageToGoBack: pageName });
+    navigation.navigate(constants.profile, { id });
   };
   
   return (
