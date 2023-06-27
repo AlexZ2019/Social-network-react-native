@@ -13,10 +13,12 @@ class PostService {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.postRepository.findAndCount({
-      where: userId,
+      where: { userId },
       skip,
       take: pageSize,
     });
+    console.log('result', result);
+    console.log('total', total);
     if (result.length) {
       return {
         posts: result,
