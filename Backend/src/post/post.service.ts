@@ -22,6 +22,7 @@ class PostService {
         posts: result,
         total,
         pages: Math.ceil(total / pageSize),
+        order: { created_at: 'DESC' },
       };
     } else {
       return {

@@ -17,6 +17,7 @@ class CommentService {
       where: postId,
       skip,
       take: size,
+      order: { created_at: 'DESC' },
     });
     if (result.length) {
       return {
