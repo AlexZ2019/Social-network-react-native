@@ -19,7 +19,7 @@ const schema = yup.object().shape({
 
 type Props = {
   text: string;
-  id: string;
+  id: number;
 }
 const EditPost = ({ text, id }: Props) => {
   const modal = useModal();
