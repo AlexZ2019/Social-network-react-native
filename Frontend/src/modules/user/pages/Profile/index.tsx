@@ -8,10 +8,8 @@ import { IUserInfo } from '../../../auth/types';
 import { EDIT_USER_MUTATION } from '../../graphql/mutations/editUser';
 import Posts from '../../../post/components/Posts';
 import CreatePost from '../../../post/components/CreatePost';
-import { ActivityIndicator, Button } from '@ant-design/react-native';
+import { ActivityIndicator } from '@ant-design/react-native';
 import {
-  useIsFocused,
-  useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import { USER_QUERY } from '../../graphql/queries/user';
@@ -19,9 +17,7 @@ import { USER_QUERY } from '../../graphql/queries/user';
 const Profile = () => {
   const { data: currentUser } = useQuery(CURRENT_USER_QUERY);
   const [fetch, { loading: isUserLoad, data }] = useLazyQuery(USER_QUERY);
-  const navigation = useNavigation();
   const currentRoute = useRoute();
-  const isFocusedScreen = useIsFocused();
   // @ts-ignore
   const userId = currentRoute.params?.id;
   const user = userId && data?.getUser || currentUser?.getCurrentUser;
