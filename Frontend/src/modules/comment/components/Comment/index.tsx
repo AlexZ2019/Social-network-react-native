@@ -29,6 +29,7 @@ const Comment = ({
   isEditable,
   postId,
   name,
+  email,
   nickname,
   userId,
 }: Props) => {
@@ -55,7 +56,7 @@ const Comment = ({
                            setIsEdit={setIsEdit}/>
               : <>
                 <Text onPress={() => openProfile(userId)}>{name || nickname ||
-                  'Post'}</Text>
+                  email}</Text>
                 <Text style={{ marginLeft: 16 }}>{text}</Text>
               </>
             }

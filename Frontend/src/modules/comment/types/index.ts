@@ -9,6 +9,7 @@ export type CommentType = {
   text: string;
   like: number | null;
   name: string | null;
+  email: string;
   nickname: string | null;
   media: string | null;
 }

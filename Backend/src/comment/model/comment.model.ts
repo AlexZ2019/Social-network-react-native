@@ -8,6 +8,9 @@ class CommentModel {
   @Field()
   postId: number;
   
+  @Field({ nullable: true })
+  email: string;
+  
   @Field()
   userId: number;
   

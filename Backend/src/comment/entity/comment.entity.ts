@@ -16,6 +16,9 @@ export default class Comment extends BaseEntity {
   name: string;
   
   @Column()
+  email: string;
+  
+  @Column()
   nickname: string;
   
   @Column()

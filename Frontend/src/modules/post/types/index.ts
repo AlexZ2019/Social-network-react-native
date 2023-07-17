@@ -1,7 +1,7 @@
 export type PostType = {
   id: number;
   userId: number;
-  text: number;
+  text: string;
   like: number;
   media: string;
   name: string;

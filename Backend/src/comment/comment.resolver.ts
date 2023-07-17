@@ -32,8 +32,12 @@ class CommentResolver {
     await this.commentService.createComment({
       ...comment,
       userId: context.req.user.id,
-      name: `${user.firstname} ${user.lastname}` || null,
+      name:
+        user.firstname && user.lastname
+          ? `${user.firstname} ${user.lastname}`
+          : null,
       nickname: user.nickname || null,
+      email: user.email,
     });
     return true;
   }

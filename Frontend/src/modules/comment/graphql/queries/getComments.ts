@@ -11,6 +11,7 @@ export const GET_COMMENTS = gql`
                 postId
                 userId
                 name
+                email
                 nickname
                 like
             }

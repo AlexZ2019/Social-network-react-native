@@ -17,8 +17,6 @@ class PostService {
       skip,
       take: pageSize,
     });
-    console.log('result', result);
-    console.log('total', total);
     if (result.length) {
       return {
         posts: result,
