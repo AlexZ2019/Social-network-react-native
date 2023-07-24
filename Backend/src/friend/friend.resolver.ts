@@ -11,11 +11,7 @@ import AccessTokenGuard from '../auth/guards/accessToken.guard';
 @Injectable()
 @Resolver()
 class FriendResolver {
-  constructor(
-    private readonly friendService: FriendService,
-    @InjectRepository(Token)
-    private readonly tokenRepository: Repository<Token>,
-  ) {}
+  constructor(private readonly friendService: FriendService) {}
 
   @Query(() => UsersModel)
   @UseGuards(AccessTokenGuard)
