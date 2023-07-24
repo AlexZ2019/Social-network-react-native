@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import Post from './entity/post.entity';
 
 @Injectable()
@@ -23,6 +23,30 @@ class PostService {
         posts: result,
         total,
         pages: Math.ceil(total / pageSize),
+      };
+    } else {
+      return {
+        total: 0,
+        pages: 0,
+        posts: [],
+      };
+    }
+  }
+  
+  async getPostsByUserIds(userIds, part, partSize) {
+    const lastItemCount = part * partSize;
+    const skip = lastItemCount - partSize;
+    const [result, total] = await this.postRepository.findAndCount({
+      where: [{ userId: In(userIds) }],
+      skip,
+      take: partSize,
+      order: { created_at: 'DESC' },
+    });
+    if (result.length) {
+      return {
+        posts: result,
+        total,
+        pages: Math.ceil(total / partSize),
       };
     } else {
       return {

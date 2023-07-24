@@ -9,6 +9,7 @@ import DbModule from './db/db.module';
 import PostModule from './post/post.module';
 import FriendModule from './friend/friend.module';
 import CommentModule from './comment/comment.module';
+import NewsModule from './news/news.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import CommentModule from './comment/comment.module';
     CommentModule,
     PostModule,
     FriendModule,
+    NewsModule,
   ],
   providers: [],
 })
