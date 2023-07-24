@@ -16,13 +16,13 @@ class PostService {
       where: { userId },
       skip,
       take: pageSize,
+      order: { created_at: 'DESC' },
     });
     if (result.length) {
       return {
         posts: result,
         total,
         pages: Math.ceil(total / pageSize),
-        order: { created_at: 'DESC' },
       };
     } else {
       return {
