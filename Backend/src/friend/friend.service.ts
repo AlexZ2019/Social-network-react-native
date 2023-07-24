@@ -11,20 +11,9 @@ class FriendService {
     @InjectRepository(Friend)
     private readonly friendRepository: Repository<Friend>,
   ) {}
-  
+
   async getFriends(userId: number, searchValue = '', page = 1, pageSize = 10) {
-    const friends = await this.friendRepository.findBy([
-      { user1: userId },
-      { user2: userId },
-    ]);
-    const friendIds = friends.reduce((ids, id) => {
-      if (id.user1 !== userId) {
-        return [...ids, id.user1];
-      }
-      if (id.user2 !== userId) {
-        return [...ids, id.user2];
-      }
-    }, []);
+    const friendIds = await this.getFriendsIds(userId);
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
     const [result, total] = await this.userRepository.findAndCount({
@@ -43,6 +32,21 @@ class FriendService {
       total,
       pages: Math.ceil(total / pageSize),
     };
+  }
+  
+  async getFriendsIds(userId) {
+    const friends = await this.friendRepository.findBy([
+      { user1: userId },
+      { user2: userId },
+    ]);
+    return friends.reduce((ids, id) => {
+      if (id.user1 !== userId) {
+        return [...ids, id.user1];
+      }
+      if (id.user2 !== userId) {
+        return [...ids, id.user2];
+      }
+    }, []);
   }
 }
 
