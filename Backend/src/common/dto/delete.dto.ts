@@ -5,4 +5,7 @@ import { ArgsType, Field, InputType } from '@nestjs/graphql';
 export default class DeleteArgs {
   @Field()
   id: number;
+  
+  @Field()
+  postId: number;
 }

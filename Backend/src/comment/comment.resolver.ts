@@ -8,6 +8,7 @@ import CommentsModel from './model/comments.model';
 import CommentArgs from './dto/comment.dto';
 import DeleteArgs from '../common/dto/delete.dto';
 import UserService from '../user/user.service';
+import PostService from '../post/post.service';
 
 @Injectable()
 @Resolver()
@@ -15,9 +16,10 @@ import UserService from '../user/user.service';
 class CommentResolver {
   constructor(
     private readonly commentService: CommentService,
+    private readonly postService: PostService,
     private readonly userService: UserService,
   ) {}
-  
+
   @Query(() => CommentsModel)
   async getComments(
     @Context() context,
@@ -50,8 +52,13 @@ class CommentResolver {
   
   @Mutation(() => Boolean)
   async deleteComment(@Args() args: DeleteArgs, @Context() context) {
-    await this.commentService.deleteComment(args.id, context.req.user.id);
-    return true;
+    const post = await this.postService.getPostById(args.postId);
+    if (post.userId === context.req.user.id) {
+      await this.commentService.deleteComment(args.id);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

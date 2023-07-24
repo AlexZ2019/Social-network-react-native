@@ -4,13 +4,13 @@ import {
   DELETE_COMMENT,
 } from '../../graphql/mutations/deleteComment';
 
-const DeleteComment = ({ id }: { id: number }) => {
+const DeleteComment = ({ id, postId }: { id: number, postId: number }) => {
   
   const [deleteComment, { loading }] = useMutation(DELETE_COMMENT);
   
   const onPressHandler = async () => {
     await deleteComment({
-      variables: { id },
+      variables: { id, postId },
       update(cache) {
         const normalizedId = cache.identify({ id, __typename: 'CommentModel' });
         cache.evict({ id: normalizedId });

@@ -8,7 +8,7 @@ class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepository: Repository<Post>,
   ) {}
-  
+
   async getUserPosts(userId, page = 1, pageSize = 10) {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
@@ -33,6 +33,10 @@ class PostService {
     }
   }
   
+  async getPostById(postId) {
+    return this.postRepository.findOneBy({ id: postId });
+  }
+  
   async createPost(post) {
     await this.postRepository.insert(post);
   }
@@ -40,7 +44,7 @@ class PostService {
   async editPost(userId, post) {
     await this.postRepository.update({ id: post.id, userId }, post);
   }
-
+  
   async deletePost(id: number, userId: number) {
     await this.postRepository.delete({ id, userId });
   }

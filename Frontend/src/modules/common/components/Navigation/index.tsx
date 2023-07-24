@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 const Navigation = ({ tab }: { tab: string }) => {
   const navigation = useNavigation();
   const onChangeTab = (tabName: string) => {
+    // @ts-ignore
     navigation.navigate(tabName);
   };
   

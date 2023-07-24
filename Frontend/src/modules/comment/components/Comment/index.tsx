@@ -3,7 +3,11 @@ import { Card, View, Text, Flex, Icon } from '@ant-design/react-native';
 import EditComment from '../EditComment';
 import { CommentType } from '../../types';
 import constants from '../../../user/constants';
-import { ParamListBase, useNavigation } from '@react-navigation/native';
+import {
+  ParamListBase,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import DeleteComment from '../DeleteComment';
 
@@ -35,19 +39,23 @@ const Comment = ({
 }: Props) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const currentRoute = useRoute();
+  // @ts-ignore
+  const profileId = currentRoute.params?.id;
   const openProfile = (id: number) => {
     navigation.navigate(constants.profile, { id });
   };
+  
   return (
     <>
       <Card style={postStyle}>
         <Flex justify="between" style={headStyles}>
-          {isEditable &&
-            <View>
-              <Icon name="edit" onPress={() => setIsEdit(!isEdit)}/>
-              <DeleteComment id={id}/>
-            </View>
-          }
+          <View>
+            {isEditable &&
+              <Icon name="edit" onPress={() => setIsEdit(!isEdit)}/>}
+            {(isEditable || !profileId) &&
+              <DeleteComment id={id} postId={postId}/>}
+          </View>
         </Flex>
         <Card.Body>
           <View style={{ height: 42 }}>

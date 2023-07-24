@@ -9,7 +9,7 @@ class CommentService {
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
   ) {}
-  
+
   async getComments(postId, part = 1, size = 10) {
     const lastItemCount = part * size;
     const skip = lastItemCount - size;
@@ -42,8 +42,8 @@ class CommentService {
     await this.commentRepository.update({ id: comment.id, userId }, comment);
   }
   
-  async deleteComment(id: number, userId: number) {
-    await this.commentRepository.delete({ id, userId });
+  async deleteComment(id: number) {
+    await this.commentRepository.delete({ id });
   }
 }
 
