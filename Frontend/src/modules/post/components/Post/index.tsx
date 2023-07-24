@@ -31,10 +31,11 @@ const Post = ({
   name,
   nickname,
   userId,
+  email,
 }: Props) => {
   const [commentsShow, setCommentsShow] = useState<boolean>(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const openProfile = (id: number) => {
+  const openProfile = (id: number | undefined) => {
     navigation.navigate(constants.profile, { id });
   };
   
@@ -43,7 +44,7 @@ const Post = ({
       <Card style={postStyle}>
         <Flex justify="between" style={headStyles}>
           <View onPress={() => openProfile(userId)}>
-            {name || nickname || 'Post'}
+            {name || nickname || email || 'Post'}
           </View>
           {isEditable &&
             <View>

@@ -11,6 +11,7 @@ export const GET_POSTS = gql`
                 text
                 name
                 nickname
+                email
                 like
             }
         }

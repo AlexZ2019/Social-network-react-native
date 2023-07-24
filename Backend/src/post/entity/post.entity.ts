@@ -19,5 +19,8 @@ export default class Post extends BaseEntity {
   nickname: string;
   
   @Column()
+  email: string;
+  
+  @Column()
   like: number;
 }

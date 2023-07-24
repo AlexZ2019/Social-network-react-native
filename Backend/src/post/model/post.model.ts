@@ -15,6 +15,9 @@ class PostModel {
   name: string;
   
   @Field({ nullable: true })
+  email: string;
+  
+  @Field({ nullable: true })
   nickname: string;
   
   @Field({ nullable: true })
