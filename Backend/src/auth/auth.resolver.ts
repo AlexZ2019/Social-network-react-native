@@ -28,11 +28,12 @@ export default class AuthResolver {
   
   @Mutation(() => Boolean)
   @UseGuards(AccessTokenGuard)
-  public async logout(@Context() context): Promise<void> {
+  public async logout(@Context() context): Promise<boolean> {
     await this.authService.logout(
       context.req.user.id,
       context.req.headers.authorization.replace('Bearer ', ''),
     );
+    return true;
   }
   
   @Mutation(() => Tokens)

@@ -70,6 +70,8 @@ const errorLink = onError(
               });
               return forward(operation);
             });
+          default:
+            console.log(err);
         }
       }
     }
