@@ -15,13 +15,14 @@ import NotAuthRouteWrapper
 import { ApolloProvider } from '@apollo/client';
 import { client } from './src/modules/apollo';
 import constants from './src/modules/News/constants';
-import { StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import React from 'react';
 import en_US from '@ant-design/react-native/lib/locale-provider/en_US';
 import { Provider } from '@ant-design/react-native';
 import 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 import Navigation from './src/modules/common/components/Navigation';
+import NavigationHeader from './src/modules/common/components/NavigationHeader';
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,10 @@ export default function App() {
                   case RouteType.Auth:
                     return (
                       <Stack.Screen key={index} name={route.path}
+                                    options={{
+                                      headerTitle: (props) =>
+                                        <NavigationHeader {...props}/>,
+                                    }}
                                     children={() => (
                                       <>
                                         <PrivetRouteWrapper>{route.page}</PrivetRouteWrapper>
