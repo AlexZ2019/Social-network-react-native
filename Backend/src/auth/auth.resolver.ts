@@ -1,5 +1,5 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { Injectable, UseGuards } from '@nestjs/common';
+import { BadRequestException, Injectable, UseGuards } from '@nestjs/common';
 import AuthService from './auth.service';
 import Tokens from './model/tokens.model';
 import AuthArgs from './dto/inputs.dto';
@@ -11,19 +11,27 @@ import TokenArgs from './dto/token.dto';
 @Resolver(() => Tokens)
 export default class AuthResolver {
   constructor(private readonly authService: AuthService) {}
-  
+
   @Mutation(() => Tokens)
   async login(@Args() authArgs: AuthArgs) {
-    return this.authService.login(authArgs);
+    try {
+      return this.authService.login(authArgs);
+    } catch (e) {
+      throw new BadRequestException('Login Error');
+    }
   }
   
   @Mutation(() => Tokens)
   @UseGuards(RefreshTokenGuard)
   public async refreshToken(@Context() context): Promise<Tokens> {
-    return this.authService.refreshTokens(
-      context.req.user,
-      context.req.headers.authorization.replace('Bearer ', ''),
-    );
+    try {
+      return this.authService.refreshTokens(
+        context.req.user,
+        context.req.headers.authorization.replace('Bearer ', ''),
+      );
+    } catch (e) {
+      throw new BadRequestException('Error getting refresh token');
+    }
   }
   
   @Mutation(() => Boolean)
