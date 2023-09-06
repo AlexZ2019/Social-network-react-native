@@ -2,7 +2,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import UserService from './user.service';
-import { Injectable, UseGuards } from '@nestjs/common';
+import { BadRequestException, Injectable, UseGuards } from '@nestjs/common';
 import AccessTokenGuard from '../auth/guards/accessToken.guard';
 import UserModel from './model/user.model';
 import Token from '../auth/entities/token.entity';
@@ -24,12 +24,19 @@ class UserResolver {
   @Query(() => UserModel)
   @UseGuards(AccessTokenGuard)
   async getCurrentUser(@Context() context): Promise<UserModel> {
-    const tokens = await this.tokenRepository.findBy({
-      userId: context.req.user.id,
-    });
-    const userToken = context.req.headers.authorization.replace('Bearer ', '');
-    if (tokens.some((token) => token.accessToken === userToken)) {
-      return this.userService.getUserByEmail(context.req.user.email);
+    try {
+      const tokens = await this.tokenRepository.findBy({
+        userId: context.req.user.id,
+      });
+      const userToken = context.req.headers.authorization.replace(
+        'Bearer ',
+        '',
+      );
+      if (tokens.some((token) => token.accessToken === userToken)) {
+        return this.userService.getUserByEmail(context.req.user.email);
+      }
+    } catch (e) {
+      throw new BadRequestException('Error getting user');
     }
   }
 
@@ -38,16 +45,20 @@ class UserResolver {
     try {
       await this.userService.createUser(user);
       return true;
-    } catch (e) {
-      throw e;
+    } catch ({ message }) {
+      throw new BadRequestException(message);
     }
   }
 
   @Mutation(() => Boolean)
   @UseGuards(AccessTokenGuard)
   async editUser(@Args() user: UserArgs, @Context() context): Promise<boolean> {
-    await this.userService.updateUser(user, context.req.user.id);
-    return true;
+    try {
+      await this.userService.updateUser(user, context.req.user.id);
+      return true;
+    } catch ({ message }) {
+      throw new BadRequestException(message);
+    }
   }
 
   @Query(() => UsersModel)
@@ -56,18 +67,26 @@ class UserResolver {
     @Args() args: UsersArgs,
     @Context() context,
   ): Promise<UsersModel> {
-    return this.userService.getUsers(
-      args.searchValue,
-      args.page,
-      args.pageSize,
-      context.req.user.id,
-    );
+    try {
+      return this.userService.getUsers(
+        args.searchValue,
+        args.page,
+        args.pageSize,
+        context.req.user.id,
+      );
+    } catch (e) {
+      throw new BadRequestException('Error getting users');
+    }
   }
-  
+
   @Query(() => UserModel)
   @UseGuards(AccessTokenGuard)
   async getUser(@Args() args: GetUserArgs) {
-    return this.userService.getUserById(args.id);
+    try {
+      return this.userService.getUserById(args.id);
+    } catch (e) {
+      throw new BadRequestException('Error getting users');
+    }
   }
 }
 
