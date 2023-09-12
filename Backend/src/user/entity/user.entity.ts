@@ -8,7 +8,7 @@ export default class User extends BaseEntity {
 
   @Column()
   nickname: string;
-  
+
   @Column()
   password: string;
   
@@ -29,4 +29,10 @@ export default class User extends BaseEntity {
   
   @Column()
   lastname: string;
+  
+  @Column({ nullable: true })
+  image?: string;
+  
+  @Column({ nullable: true })
+  imagepath?: string;
 }

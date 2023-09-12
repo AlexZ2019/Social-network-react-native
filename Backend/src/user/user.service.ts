@@ -5,6 +5,12 @@ import { Like, Not, Repository } from 'typeorm';
 import { IUserData } from './types';
 import AuthArgs from '../auth/dto/inputs.dto';
 import Friend from '../friend/entity/friend.entity';
+import * as Upload from 'graphql-upload/Upload';
+import axios from 'axios';
+import * as FormData from 'form-data';
+import { join } from 'path';
+import * as fs from 'fs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 class UserService {
@@ -12,18 +18,25 @@ class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Friend)
     private readonly friendRepository: Repository<Friend>,
+    private readonly configService: ConfigService,
   ) {}
-
+  
   async getUserByEmailWithPassword(email: string) {
     return this.userRepository.findOneBy({ email });
   }
-
+  
   async getUserByEmail(email: string) {
     const user = await this.userRepository.findOneBy({ email });
     const { password, ...restUser } = user;
     return restUser;
   }
-
+  
+  async getUserById(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+    const { password, ...restUser } = user;
+    return restUser;
+  }
+  
   async getUsers(searchValue = '', page = 1, pageSize = 10, userId) {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
@@ -59,6 +72,59 @@ class UserService {
     await this.userRepository.update({ id: userId }, { ...userData });
   }
   
+  async uploadUserAvatar(userId: number, image: Upload) {
+    const file = await image;
+    const filePath = join(__dirname, `../../src/user/uploads/${file.filename}`);
+    await new Promise((resolve, reject) => {
+      file.createReadStream().
+        pipe(fs.createWriteStream(filePath)).
+        on('finish', () => {
+          resolve(true);
+        }).
+        on('error', (error) => {
+          console.log('IMAGE_UPLOAD_ERROR', error);
+          reject(false);
+        });
+    });
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(filePath));
+    const { data } = await axios.post(
+      `${this.configService.get('FILES_CLOUD_URL')}uploads/form_data`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${this.configService.get(
+            'FILES_CLOUD_AUTH_PUBLIC_TOKEN',
+          )}`,
+        },
+      },
+    );
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+    const user = await this.getUserById(userId);
+    await this.userRepository.update(
+      { id: userId },
+      { image: data.files[0].fileUrl, imagepath: data.files[0].filePath },
+    );
+    if (user.image && user.imagepath) {
+      await axios.delete(
+        `${this.configService.get('FILES_CLOUD_URL')}files?filePath=${
+          user.imagepath
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.configService.get(
+              'FILES_CLOUD_AUTH_SECRET_TOKEN',
+            )}`,
+          },
+        },
+      );
+    }
+  }
+  
   async createUser(user: AuthArgs) {
     const existedUser = await this.userRepository.findOneBy({
       email: user.email,
@@ -69,12 +135,6 @@ class UserService {
   
   async createGoogleUser(email) {
     return this.userRepository.insert({ email });
-  }
-  
-  async getUserById(id: number) {
-    const user = await this.userRepository.findOneBy({ id });
-    const { password, ...restUser } = user;
-    return restUser;
   }
 }
 

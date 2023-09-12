@@ -11,6 +11,8 @@ import AuthArgs from '../auth/dto/inputs.dto';
 import UsersArgs from './dto/users.dto';
 import UsersModel from './model/users.model';
 import GetUserArgs from './dto/getUser.dto';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import * as Upload from 'graphql-upload/Upload.js';
 
 @Injectable()
 @Resolver()
@@ -60,7 +62,22 @@ class UserResolver {
       throw new BadRequestException(message);
     }
   }
-
+  
+  @Mutation(() => Boolean)
+  // @UseGuards(AccessTokenGuard)
+  async uploadUserAvatar(
+    @Args({ name: 'image', type: () => GraphQLUpload })
+      image: Upload,
+    @Context() context,
+  ): Promise<any> {
+    try {
+      await this.userService.uploadUserAvatar(3, image);
+      return true;
+    } catch (e) {
+      throw new Error('Error uploading image');
+    }
+  }
+  
   @Query(() => UsersModel)
   @UseGuards(AccessTokenGuard)
   async getUsers(
