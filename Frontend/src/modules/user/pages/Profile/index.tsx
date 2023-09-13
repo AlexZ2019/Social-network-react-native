@@ -21,7 +21,6 @@ const Profile = () => {
   const user = userId && data?.getUser || currentUser?.getCurrentUser;
   const [isEditProfile, setIsEditProfile] = useState<Boolean>(false);
   const [editUser, { loading }] = useMutation(EDIT_USER_MUTATION);
-  
   useEffect(() => {
     fetch({ variables: { id: userId } });
   }, [userId]);
@@ -43,6 +42,7 @@ const Profile = () => {
                      email={user?.email}
                      serIsEditProfile={setIsEditProfile}
                      isEditProfile={isEditProfile}
+                     image={user?.image}
       />
       {isEditProfile && !userId
         ? <EditUserForm user={currentUser.getCurrentUser} onSubmit={onSubmit}

@@ -14,6 +14,7 @@ export const USERS_QUERY = gql`
                 email
                 birthday
                 biography
+                image
             }
         }
     }

@@ -50,7 +50,7 @@ const Users = ({ query, pageName }: Props) => {
                                         email={item.email}
                                         nickname={item.nickname} sex={item.sex}
                                         key={item.id} onPress={openProfile}
-                                        id={item.id}/>;
+                                        id={item.id} userImage={item.image}/>;
                 }}/>
       <ActivityIndicator animating={networkStatus === NetworkStatus.fetchMore
         || loading}/>

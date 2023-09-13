@@ -11,6 +11,7 @@ type Props = {
   isFriend: boolean;
   email: string;
   onPress: (id: number) => void;
+  image?: string;
 }
 const UserMinimized = ({
   id,
@@ -28,8 +29,9 @@ const UserMinimized = ({
       <Card.Body>
         <Flex onPress={() => onPress(id)}>
           <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-            <Image style={{ width: 56, height: 56 }} source={userImage ||
-              require('../../../../assets/user/default-avatar.png')}/>
+            <Image style={{ width: 56, height: 56 }}
+                   source={userImage ? { uri: userImage }
+                     : require('../../../../assets/user/default-avatar.png')}/>
             <Text>{nickname || email}</Text>
           </Flex.Item>
           <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>

@@ -9,6 +9,7 @@ export const CURRENT_USER_QUERY = gql`
             birthday
             biography
             status
+            image
         }
     }
 `;

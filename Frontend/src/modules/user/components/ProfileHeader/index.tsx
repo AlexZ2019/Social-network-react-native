@@ -8,16 +8,18 @@ const ProfileHeader = ({
   email,
   serIsEditProfile,
   isEditProfile,
+  image,
 }: {
   nickname?: string, email?: string,
   serIsEditProfile: Dispatch<SetStateAction<Boolean>>,
   isEditProfile: Boolean,
+  image?: string;
 }) => {
-  
   return (
     <Flex>
       <FlexItem>
-        <Image source={require('../../../../assets/user/default-avatar.png')}
+        <Image source={image ? { uri: image }
+          : require('../../../../assets/user/default-avatar.png')}
                style={{ width: 45, height: 45 }}/>
         <Text>{nickname || email}</Text>
       </FlexItem>

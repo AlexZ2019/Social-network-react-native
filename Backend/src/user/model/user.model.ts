@@ -25,6 +25,9 @@ class UserModel {
   
   @Field({ nullable: true })
   isFriend?: boolean | null;
+  
+  @Field({ nullable: true })
+  image?: string;
 }
 
 export default UserModel;
