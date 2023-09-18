@@ -62,16 +62,16 @@ class UserResolver {
       throw new BadRequestException(message);
     }
   }
-  
+
   @Mutation(() => Boolean)
-  // @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   async uploadUserAvatar(
     @Args({ name: 'image', type: () => GraphQLUpload })
       image: Upload,
     @Context() context,
   ): Promise<any> {
     try {
-      await this.userService.uploadUserAvatar(3, image);
+      await this.userService.uploadUserAvatar(context.req.user.id, image);
       return true;
     } catch (e) {
       throw new Error('Error uploading image');

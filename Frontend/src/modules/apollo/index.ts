@@ -1,6 +1,5 @@
 import {
   ApolloClient,
-  createHttpLink,
   from, fromPromise,
   GraphQLRequest,
   InMemoryCache,
@@ -14,6 +13,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN_MUTATION } from '../auth/graphql/mutations/refreshToken';
+import { createUploadLink } from 'apollo-upload-client';
 
 const isRefreshRequest = (operation: GraphQLRequest) => operation.operationName ===
   'refreshToken';
@@ -45,7 +45,7 @@ const refreshToken = async () => {
   }
 };
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: `${API_HOST}${API_PORT}/graphql`,
 });
 
@@ -87,6 +87,7 @@ const authLink = setContext(async (operation, { headers }) => {
     headers: {
       ...headers,
       authorization: `Bearer ${token}`,
+      'Apollo-Require-Preflight': 'true',
     },
   };
 });

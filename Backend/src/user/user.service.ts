@@ -11,6 +11,7 @@ import * as FormData from 'form-data';
 import { join } from 'path';
 import * as fs from 'fs';
 import { ConfigService } from '@nestjs/config';
+import * as mime from 'mime-types';
 
 @Injectable()
 class UserService {
@@ -20,11 +21,11 @@ class UserService {
     private readonly friendRepository: Repository<Friend>,
     private readonly configService: ConfigService,
   ) {}
-  
+
   async getUserByEmailWithPassword(email: string) {
     return this.userRepository.findOneBy({ email });
   }
-  
+
   async getUserByEmail(email: string) {
     const user = await this.userRepository.findOneBy({ email });
     const { password, ...restUser } = user;
@@ -74,7 +75,12 @@ class UserService {
   
   async uploadUserAvatar(userId: number, image: Upload) {
     const file = await image;
-    const filePath = join(__dirname, `../../src/user/uploads/${file.filename}`);
+    const filePath = join(
+      __dirname,
+      `../../src/user/uploads/${file.filename}.${mime.extension(
+        file.mimetype,
+      )}`,
+    );
     await new Promise((resolve, reject) => {
       file.createReadStream().
         pipe(fs.createWriteStream(filePath)).
