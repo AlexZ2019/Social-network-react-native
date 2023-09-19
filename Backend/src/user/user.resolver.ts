@@ -63,7 +63,7 @@ class UserResolver {
       throw new BadRequestException(message);
     }
   }
-  
+
   @Mutation(() => AvatarModel)
   @UseGuards(AccessTokenGuard)
   async uploadUserAvatar(
