@@ -31,13 +31,14 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
     }
   };
   
-  const uploadImage = () => {
+  const uploadImage = async () => {
     const file = new ReactNativeFile({
       uri: uploadedImage,
       name: `picture-${Date.now()}`,
       type: mime.lookup(uploadedImage),
     });
-    upload({ variables: { image: file } });
+    await upload({ variables: { image: file } });
+    modal.hideModal();
   };
   
   return (
