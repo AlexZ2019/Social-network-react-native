@@ -18,11 +18,14 @@ const Profile = () => {
   const currentRoute = useRoute();
   // @ts-ignore
   const userId = currentRoute.params?.id;
+  console.log(userId);
   const user = userId && data?.getUser || currentUser?.getCurrentUser;
   const [isEditProfile, setIsEditProfile] = useState<Boolean>(false);
   const [editUser, { loading }] = useMutation(EDIT_USER_MUTATION);
   useEffect(() => {
-    fetch({ variables: { id: userId } });
+    if (userId) {
+      fetch({ variables: { id: userId } });
+    }
   }, [userId]);
   
   const onSubmit = async (data: IUserInfo): Promise<void> => {
