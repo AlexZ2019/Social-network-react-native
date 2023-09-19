@@ -31,13 +31,13 @@ class UserService {
     const { password, ...restUser } = user;
     return restUser;
   }
-  
+
   async getUserById(id: number) {
     const user = await this.userRepository.findOneBy({ id });
     const { password, ...restUser } = user;
     return restUser;
   }
-  
+
   async getUsers(searchValue = '', page = 1, pageSize = 10, userId) {
     const lastItemCount = page * pageSize;
     const skip = lastItemCount - pageSize;
@@ -73,7 +73,10 @@ class UserService {
     await this.userRepository.update({ id: userId }, { ...userData });
   }
   
-  async uploadUserAvatar(userId: number, image: Upload) {
+  async uploadUserAvatar(
+    userId: number,
+    image: Upload,
+  ): Promise<{ imageUrl: string }> {
     const file = await image;
     const filePath = join(
       __dirname,
@@ -129,6 +132,7 @@ class UserService {
         },
       );
     }
+    return { imageUrl: data.files[0].fileUrl };
   }
   
   async createUser(user: AuthArgs) {

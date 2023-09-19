@@ -13,6 +13,7 @@ import UsersModel from './model/users.model';
 import GetUserArgs from './dto/getUser.dto';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import * as Upload from 'graphql-upload/Upload.js';
+import AvatarModel from './model/avatar.model';
 
 @Injectable()
 @Resolver()
@@ -62,17 +63,16 @@ class UserResolver {
       throw new BadRequestException(message);
     }
   }
-
-  @Mutation(() => Boolean)
+  
+  @Mutation(() => AvatarModel)
   @UseGuards(AccessTokenGuard)
   async uploadUserAvatar(
     @Args({ name: 'image', type: () => GraphQLUpload })
       image: Upload,
     @Context() context,
-  ): Promise<any> {
+  ): Promise<{ imageUrl: string }> {
     try {
-      await this.userService.uploadUserAvatar(context.req.user.id, image);
-      return true;
+      return this.userService.uploadUserAvatar(context.req.user.id, image);
     } catch (e) {
       throw new Error('Error uploading image');
     }

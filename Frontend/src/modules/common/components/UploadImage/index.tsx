@@ -2,19 +2,18 @@ import { View } from 'react-native';
 import { Button, Modal } from '@ant-design/react-native';
 import * as ImagePicker from 'expo-image-picker';
 import React, { FC } from 'react';
-import { useMutation } from '@apollo/client';
 import useModal from '../../hooks/useModal';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 
 type Props = {
-  mutation: any;
+  upload: (p: { variables: { image: ReactNativeFile } }) => void;
+  loading: boolean
   uploadBtnText: string;
 }
 
-const UploadImage: FC<Props> = ({ mutation, uploadBtnText }) => {
+const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
   const [uploadedImage, setUploadedImage] = React.useState<string | null>(null);
-  const [upload, { loading, data }] = useMutation(mutation);
   const modal = useModal();
   
   const handleChoosePhoto = async () => {

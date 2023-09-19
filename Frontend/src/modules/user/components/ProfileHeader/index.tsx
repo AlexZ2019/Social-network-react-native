@@ -6,6 +6,8 @@ import UploadImage from '../../../common/components/UploadImage';
 import {
   UPLOAD_USER_AVATAR_MUTATION,
 } from '../../graphql/mutations/UploadUserAvatar';
+import { useMutation } from '@apollo/client';
+import { CURRENT_USER_QUERY } from '../../graphql/queries/currentUser';
 
 const ProfileHeader = ({
   nickname,
@@ -22,15 +24,28 @@ const ProfileHeader = ({
   userId?: number;
 }) => {
   
+  const [upload, { loading }] = useMutation(UPLOAD_USER_AVATAR_MUTATION, {
+    update(cache, { data }) {
+      const user = cache.readQuery({ query: CURRENT_USER_QUERY });
+      const updatedUser = {
+        getCurrentUser: {
+          ...user.getCurrentUser,
+          image: data.uploadUserAvatar.imageUrl,
+        },
+      };
+      cache.writeQuery({ query: CURRENT_USER_QUERY, data: updatedUser });
+    },
+  });
+  
   return (
     <Flex>
       <FlexItem>
         <Image source={image ? { uri: image }
           : require('../../../../assets/user/default-avatar.png')}
-               style={{ width: 45, height: 45 }}/>
+               style={{ width: 45, height: 45, resizeMode: 'contain' }}/>
         <Text>{nickname || email}</Text>
       </FlexItem>
-      {!userId && <UploadImage mutation={UPLOAD_USER_AVATAR_MUTATION}
+      {!userId && <UploadImage upload={upload} loading={loading}
                                uploadBtnText="Upload avatar"/>}
       <FlexItem>
         <Button type="primary" style={{ width: 45, marginLeft: 125 }}
