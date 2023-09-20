@@ -14,6 +14,9 @@ import GetUserArgs from './dto/getUser.dto';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import * as Upload from 'graphql-upload/Upload.js';
 import AvatarModel from './model/avatar.model';
+import {
+  ImageValidationPipe,
+} from '../common/helpers/validation/imageValidation.pipe';
 
 @Injectable()
 @Resolver()
@@ -67,7 +70,7 @@ class UserResolver {
   @Mutation(() => AvatarModel)
   @UseGuards(AccessTokenGuard)
   async uploadUserAvatar(
-    @Args({ name: 'image', type: () => GraphQLUpload })
+    @Args({ name: 'image', type: () => GraphQLUpload }, ImageValidationPipe)
       image: Upload,
     @Context() context,
   ): Promise<{ imageUrl: string }> {

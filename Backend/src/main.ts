@@ -5,10 +5,10 @@ import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config = await app.get(ConfigService);
+  const config = app.get(ConfigService);
   const port = config.get<number>('API_PORT');
   app.enableCors();
-  app.use('/graphql', graphqlUploadExpress());
+  app.use('/graphql', graphqlUploadExpress({ maxFiles: 10 }));
   await app.listen(port);
 }
 
