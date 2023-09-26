@@ -1,4 +1,3 @@
-import * as FormData from 'form-data';
 import * as fs from 'fs';
 import axios from 'axios';
 import Upload from 'graphql-upload/Upload';
@@ -28,16 +27,16 @@ export const uploadFile = async (
     stream.on('error', (error) => writeStream.destroy(error));
     stream.pipe(writeStream);
   });
-  const formData = new FormData();
-  formData.append('file', fs.createReadStream(filePath));
   const { data } = await axios.post(
-    `${configService.get('FILES_CLOUD_URL')}uploads/form_data`,
-    formData,
+    `${configService.get('FILES_CLOUD_URL')}?policy=${configService.get(
+      'FILES_CLOUD_POLICY',
+    )}&signature=${configService.get(
+      'FILES_CLOUD_SIGNATURE',
+    )}&key=${configService.get('FILES_CLOUD_API_KEY')}`,
+    fs.createReadStream(filePath),
     {
       headers: {
-        Authorization: `Bearer ${configService.get(
-          'FILES_CLOUD_AUTH_PUBLIC_TOKEN',
-        )}`,
+        'Content-Type': mimetype,
       },
     },
   );
@@ -46,5 +45,5 @@ export const uploadFile = async (
       console.error(err);
     }
   });
-  return data.files;
+  return data;
 };

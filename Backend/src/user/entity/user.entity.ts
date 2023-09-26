@@ -32,7 +32,4 @@ export default class User extends BaseEntity {
   
   @Column({ nullable: true })
   image?: string;
-  
-  @Column({ nullable: true })
-  imagepath?: string;
 }

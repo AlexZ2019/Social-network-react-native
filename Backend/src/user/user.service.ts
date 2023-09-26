@@ -65,11 +65,11 @@ class UserService {
       pages: Math.ceil(total / pageSize),
     };
   }
-  
+
   async updateUser(userData: IUserData, userId: number) {
     await this.userRepository.update({ id: userId }, { ...userData });
   }
-  
+
   async uploadUserAvatar(userId: number, image: Upload): Promise<any> {
     const data = await uploadFile(
       image,
@@ -77,25 +77,25 @@ class UserService {
       this.configService,
     );
     const user = await this.getUserById(userId);
-    await this.userRepository.update(
-      { id: userId },
-      { image: data[0].fileUrl, imagepath: data[0].filePath },
-    );
-    if (user.image && user.imagepath) {
+    await this.userRepository.update({ id: userId }, { image: data.url });
+    if (user.image) {
       await axios.delete(
-        `${this.configService.get('FILES_CLOUD_URL')}files?filePath=${
-          user.imagepath
-        }`,
+        `${this.configService.get(
+          'FILES_CLOUD_REMOVE_FILE_URL',
+        )}${user.image.replace(
+          this.configService.get('FILE_CLOUD_SERVICE_URL'),
+          '',
+        )}`,
         {
-          headers: {
-            Authorization: `Bearer ${this.configService.get(
-              'FILES_CLOUD_AUTH_SECRET_TOKEN',
-            )}`,
+          params: {
+            policy: this.configService.get('FILES_CLOUD_POLICY'),
+            signature: this.configService.get('FILES_CLOUD_SIGNATURE'),
+            key: this.configService.get('FILES_CLOUD_API_KEY'),
           },
         },
       );
     }
-    return { imageUrl: data[0].fileUrl };
+    return { imageUrl: data.url };
   }
   async createUser(user: AuthArgs) {
     const existedUser = await this.userRepository.findOneBy({
