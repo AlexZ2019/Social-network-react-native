@@ -37,11 +37,22 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
       if (assets && !await fileSizeValidation(assets[0].uri, MAX_SIZE_BYTES)) {
         throw new Error(`File size can not be bigger then ${MAX_SIZE_TEXT}`);
       }
-      
       setUploadedImage(assets[0].uri);
     } catch (err) {
       setUploadedImage(null);
       return false;
+    }
+  };
+  
+  const takePhoto = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert('You\'ve refused to allow this appp to access your camera!');
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync();
+    if (!result.cancelled) {
+      setUploadedImage(result.uri);
     }
   };
   
@@ -65,6 +76,7 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
         animationType="slide-up"
         onClose={modal.hideModal}>
         <Button onPress={handleChoosePhoto}>Choose image</Button>
+        <Button onPress={takePhoto}>Take a photo</Button>
         <Button type="primary" loading={loading} disabled={!uploadedImage}
                 onPress={uploadImage}>
           Upload
