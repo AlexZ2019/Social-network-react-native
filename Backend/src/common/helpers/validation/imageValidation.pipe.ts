@@ -4,7 +4,7 @@ import { validateFileFormat, validateFileSize } from './fileValidation';
 import * as fs from 'fs';
 
 const IMAGE_SIZE_TEXT = '3MB';
-const IMAGE_SIZE = 3e+6;
+const IMAGE_SIZE = 3e6;
 
 @Injectable()
 export class ImageValidationPipe implements PipeTransform {

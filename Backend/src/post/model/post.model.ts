@@ -22,7 +22,6 @@ class PostModel {
   
   @Field({ nullable: true })
   like: number;
-  
 }
 
 export default PostModel;

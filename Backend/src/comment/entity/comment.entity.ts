@@ -23,5 +23,4 @@ export default class Comment extends BaseEntity {
   
   @Column()
   like: number;
-  
 }
