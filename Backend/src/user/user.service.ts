@@ -67,7 +67,7 @@ class UserService {
   }
 
   async updateUser(userData: IUserData, userId: number) {
-    await this.userRepository.update({ id: userId }, { ...userData });
+    await this.userRepository.update({ id: userId }, userData);
   }
 
   async uploadUserAvatar(userId: number, image: Upload): Promise<any> {

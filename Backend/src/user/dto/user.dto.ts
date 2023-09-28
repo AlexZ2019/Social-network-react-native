@@ -8,7 +8,7 @@ export default class UserArgs {
 
   @Field({ nullable: true })
   birthday: string | null;
-  
+
   @Field({ nullable: true })
   status: string | null;
   
@@ -16,8 +16,8 @@ export default class UserArgs {
   biography: string | null;
   
   @Field({ nullable: true })
-  sex: string;
-  
+  sex: 'Male' | 'Female';
+
   @Field({ nullable: true })
   firstname: string;
   

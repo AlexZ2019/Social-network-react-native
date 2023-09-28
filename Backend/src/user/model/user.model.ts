@@ -10,7 +10,7 @@ class UserModel {
 
   @Field({ nullable: true })
   nickname: string;
-  
+
   @Field({ nullable: true })
   birthday: string | null;
   
@@ -28,6 +28,12 @@ class UserModel {
   
   @Field({ nullable: true })
   image?: string;
+  
+  @Field({ nullable: true })
+  firstname?: string;
+  
+  @Field({ nullable: true })
+  lastname?: string;
 }
 
 export default UserModel;

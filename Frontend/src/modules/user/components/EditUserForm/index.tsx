@@ -39,7 +39,6 @@ const EditUserForm = ({ user, onSubmit, loading }:
       biography: user.biography || '',
     },
   });
-  
   return (
     <View>
       <Controller
@@ -81,9 +80,9 @@ const EditUserForm = ({ user, onSubmit, loading }:
       <Controller
         name="birthday"
         control={control}
-        render={({ field }) =>
-          <DatePicker
-            value={field.value}
+        render={({ field }) => {
+          return <DatePicker
+            {...field}
             minDate={new Date(1940, 7, 6)}
             maxDate={new Date()}
             mode="date"
@@ -91,6 +90,7 @@ const EditUserForm = ({ user, onSubmit, loading }:
             format="YYYY-MM-DD">
             <List.Item arrow="horizontal">Select Date</List.Item>
           </DatePicker>}
+        }
       />
       <Controller
         name="status"

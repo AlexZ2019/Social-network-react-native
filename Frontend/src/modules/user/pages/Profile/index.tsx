@@ -29,7 +29,19 @@ const Profile = () => {
   
   const onSubmit = async (data: IUserInfo): Promise<void> => {
     await editUser({
-      variables: data, onCompleted: () => {
+      variables: data,
+      update(cache) {
+        const user = cache.readQuery({ query: CURRENT_USER_QUERY });
+        const updatedUser = {
+          getCurrentUser: {
+            ...user.getCurrentUser,
+            ...data,
+            birthday: data.birthday.toISOString().split('T')[0],
+          },
+        };
+        cache.writeQuery({ query: CURRENT_USER_QUERY, data: updatedUser });
+      },
+      onCompleted: () => {
         setIsEditProfile(false);
       },
     });

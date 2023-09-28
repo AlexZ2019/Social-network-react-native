@@ -10,6 +10,8 @@ export const CURRENT_USER_QUERY = gql`
             biography
             status
             image
+            firstname
+            lastname
         }
     }
 `;

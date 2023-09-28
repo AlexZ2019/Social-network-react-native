@@ -3,4 +3,7 @@ export interface IUserData {
   birthday?: string;
   status?: string;
   biography?: string;
+  firstname?: string;
+  lastname?: string;
+  sex?: 'Male' | 'Female';
 }
