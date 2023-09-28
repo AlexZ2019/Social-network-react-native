@@ -6,10 +6,12 @@ import Post from './entity/post.entity';
 import User from '../user/entity/user.entity';
 import Friend from '../friend/entity/friend.entity';
 import UserService from '../user/user.service';
+import CommentService from '../comment/comment.service';
+import Comment from '../comment/entity/comment.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, User, Friend])],
-  providers: [PostService, PostResolver, UserService],
+  imports: [TypeOrmModule.forFeature([Post, User, Friend, Comment])],
+  providers: [PostService, PostResolver, UserService, CommentService],
   exports: [PostService],
 })
 export default class PostModule {}

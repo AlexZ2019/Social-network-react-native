@@ -8,6 +8,7 @@ import GetPostsDto from './dto/getPosts.dto';
 import PostsModel from './model/posts.model';
 import UserService from '../user/user.service';
 import DeletePostArgs from './dto/deletePost.dto';
+import CommentService from '../comment/comment.service';
 
 @Injectable()
 @Resolver()
@@ -16,6 +17,7 @@ class PostResolver {
   constructor(
     private readonly postService: PostService,
     private readonly userService: UserService,
+    private readonly commentService: CommentService,
   ) {}
 
   @Query(() => PostsModel)
@@ -67,6 +69,7 @@ class PostResolver {
   @Mutation(() => Boolean)
   async deletePost(@Args() args: DeletePostArgs, @Context() context) {
     try {
+      await this.commentService.deleteAllPostComments(args.id);
       await this.postService.deletePost(args.id, context.req.user.id);
       return true;
     } catch ({ message }) {

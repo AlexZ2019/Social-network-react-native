@@ -33,17 +33,21 @@ class CommentService {
       };
     }
   }
-  
+
   async createComment(comment) {
     await this.commentRepository.insert(comment);
   }
-  
+
   async editComment(userId, comment) {
     await this.commentRepository.update({ id: comment.id, userId }, comment);
   }
-  
+
   async deleteComment(id: number) {
     await this.commentRepository.delete({ id });
+  }
+
+  async deleteAllPostComments(postId: number) {
+    await this.commentRepository.delete({ postId });
   }
 }
 
