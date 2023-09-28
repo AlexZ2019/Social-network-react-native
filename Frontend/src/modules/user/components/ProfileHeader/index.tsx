@@ -8,6 +8,11 @@ import {
 } from '../../graphql/mutations/UploadUserAvatar';
 import { useMutation } from '@apollo/client';
 import { CURRENT_USER_QUERY } from '../../graphql/queries/currentUser';
+import {
+  FILES_CLOUD_POLICY,
+  FILES_CLOUD_SIGNATURE,
+  FILES_CLOUD_API_KEY,
+} from '@env';
 
 const ProfileHeader = ({
   nickname,
@@ -23,7 +28,6 @@ const ProfileHeader = ({
   image?: string;
   userId?: number;
 }) => {
-  
   const [upload, { loading }] = useMutation(UPLOAD_USER_AVATAR_MUTATION, {
     update(cache, { data }) {
       const user = cache.readQuery({ query: CURRENT_USER_QUERY });
@@ -40,7 +44,8 @@ const ProfileHeader = ({
   return (
     <Flex>
       <FlexItem>
-        <Image source={image ? { uri: image }
+        <Image source={image
+          ? { uri: `${image}?policy=${FILES_CLOUD_POLICY}&signature=${FILES_CLOUD_SIGNATURE}&key=${FILES_CLOUD_API_KEY}` }
           : require('../../../../assets/user/default-avatar.png')}
                style={{ width: 45, height: 45, resizeMode: 'contain' }}/>
         <Text>{nickname || email}</Text>
