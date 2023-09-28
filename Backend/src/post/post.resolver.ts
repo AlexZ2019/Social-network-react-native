@@ -6,8 +6,8 @@ import PostArgs from './dto/post.dto';
 import EditPostArgs from './dto/editPost.dto';
 import GetPostsDto from './dto/getPosts.dto';
 import PostsModel from './model/posts.model';
-import DeleteArgs from '../common/dto/delete.dto';
 import UserService from '../user/user.service';
+import DeletePostArgs from './dto/deletePost.dto';
 
 @Injectable()
 @Resolver()
@@ -65,7 +65,7 @@ class PostResolver {
   }
   
   @Mutation(() => Boolean)
-  async deletePost(@Args() args: DeleteArgs, @Context() context) {
+  async deletePost(@Args() args: DeletePostArgs, @Context() context) {
     try {
       await this.postService.deletePost(args.id, context.req.user.id);
       return true;

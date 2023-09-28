@@ -6,7 +6,7 @@ import EditPostArgs from './dto/editComment.dto';
 import GetCommentsDto from './dto/getComments.dto';
 import CommentsModel from './model/comments.model';
 import CommentArgs from './dto/comment.dto';
-import DeleteArgs from '../common/dto/delete.dto';
+import DeleteCommentArgs from './dto/deleteComment.dto';
 import UserService from '../user/user.service';
 import PostService from '../post/post.service';
 
@@ -65,9 +65,9 @@ class CommentResolver {
       throw new BadRequestException(message);
     }
   }
-  
+
   @Mutation(() => Boolean)
-  async deleteComment(@Args() args: DeleteArgs, @Context() context) {
+  async deleteComment(@Args() args: DeleteCommentArgs, @Context() context) {
     try {
       const post = await this.postService.getPostById(args.postId);
       if (post.userId === context.req.user.id) {

@@ -9,7 +9,7 @@ class NewsService {
     private readonly friendService: FriendService,
   ) {}
   
-  async getNews(userId, part = 1, partSize = 10) {
+  async getNews(userId: number, part = 1, partSize = 10) {
     const friendsIds = await this.friendService.getFriendsIds(userId);
     return this.postService.getPostsByUserIds(friendsIds, part, partSize);
   }
