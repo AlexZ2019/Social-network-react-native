@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 const UserInfo = ({ user }: { user: IUser }) => {
   const [activeSections, setActiveSections] = useState<number[]>([]);
+  const birthday = user.birthday.split('T')[0];
   const onChange = (activeSections: number[]) => {
     setActiveSections(activeSections);
   };
@@ -23,7 +24,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
                   </Flex.Item>
                   <Flex.Item style={{ margin: 4 }}>
                     <Text>Birthday</Text>
-                    <Text>{user.birthday}</Text>
+                    <Text>{birthday}</Text>
                   </Flex.Item>
                 </Flex>
                 <Flex direction="column">
