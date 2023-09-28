@@ -8,7 +8,7 @@ import { IUserInfo } from '../../../auth/types';
 import { EDIT_USER_MUTATION } from '../../graphql/mutations/editUser';
 import Posts from '../../../post/components/Posts';
 import CreatePost from '../../../post/components/CreatePost';
-import { ActivityIndicator } from '@ant-design/react-native';
+import { ActivityIndicator, Button } from '@ant-design/react-native';
 import { useRoute } from '@react-navigation/native';
 import { USER_QUERY } from '../../graphql/queries/user';
 
@@ -46,6 +46,9 @@ const Profile = () => {
                      isEditProfile={isEditProfile}
                      image={user?.image}
       />
+      {!userId &&
+        <Button onPress={() => setIsEditProfile(!isEditProfile)}>Edit User
+          Info</Button>}
       {isEditProfile && !userId
         ? <EditUserForm user={currentUser.getCurrentUser} onSubmit={onSubmit}
                         loading={loading}/>
