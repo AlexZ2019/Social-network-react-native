@@ -69,12 +69,20 @@ class UserService {
   async updateUser(userData: IUserData, userId: number) {
     await this.userRepository.update({ id: userId }, userData);
   }
-
-  async uploadUserAvatar(userId: number, image: Upload): Promise<any> {
+  
+  async uploadUserAvatar(
+    userId: number,
+    image: Upload,
+  ): Promise<{ imageUrl: string }> {
+    const params = {
+      policy: this.configService.get('FILES_CLOUD_POLICY'),
+      signature: this.configService.get('FILES_CLOUD_SIGNATURE'),
+      key: this.configService.get('FILES_CLOUD_API_KEY'),
+    };
     const data = await uploadFile(
       image,
-      '../../../src/user/uploads/',
-      this.configService,
+      `${this.configService.get('FILES_CLOUD_URL')}`,
+      params,
     );
     const user = await this.getUserById(userId);
     await this.userRepository.update({ id: userId }, { image: data.url });
@@ -87,11 +95,7 @@ class UserService {
           '',
         )}`,
         {
-          params: {
-            policy: this.configService.get('FILES_CLOUD_POLICY'),
-            signature: this.configService.get('FILES_CLOUD_SIGNATURE'),
-            key: this.configService.get('FILES_CLOUD_API_KEY'),
-          },
+          params,
         },
       );
     }
