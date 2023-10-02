@@ -21,6 +21,7 @@ const CreatePost = () => {
   const {
     control,
     handleSubmit,
+    reset,
   } = useForm<InputItem>({
     mode: 'onTouched',
     resolver: yupResolver(schema),
@@ -31,6 +32,7 @@ const CreatePost = () => {
   const onSubmit = async (data) => {
     await createPost({ variables: data });
     await fetchMore({});
+    reset();
     modal.hideModal();
   };
   return (
