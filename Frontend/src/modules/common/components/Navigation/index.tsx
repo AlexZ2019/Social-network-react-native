@@ -23,20 +23,20 @@ const Navigation = ({ tab }: { tab: string }) => {
         barTintColor="#f5f5f5">
         <TabBar.Item
           title={newsPaths.news}
-          icon={<Icon name="home"/>}
+          icon={<Icon name="read"/>}
           selected={tab === newsPaths.news}
           onPress={() => onChangeTab(newsPaths.news)}
         >
         </TabBar.Item>
         <TabBar.Item
-          icon={<Icon name="ordered-list"/>}
+          icon={<Icon name="team"/>}
           title={friendPaths.friends}
           selected={tab === friendPaths.friends}
           onPress={() => onChangeTab(friendPaths.friends)}
         >
         </TabBar.Item>
         <TabBar.Item
-          icon={<Icon name="like"/>}
+          icon={<Icon name="search"/>}
           title={userPaths.users}
           selected={tab === userPaths.users}
           onPress={() => onChangeTab(userPaths.users)}
