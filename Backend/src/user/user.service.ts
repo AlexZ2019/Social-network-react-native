@@ -8,7 +8,6 @@ import Friend from '../friend/entity/friend.entity';
 import * as Upload from 'graphql-upload/Upload';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
-import { uploadFile } from '../common/helpers/uploadFile';
 
 @Injectable()
 class UserService {
@@ -69,7 +68,7 @@ class UserService {
   async updateUser(userData: IUserData, userId: number) {
     await this.userRepository.update({ id: userId }, userData);
   }
-  
+
   async uploadUserAvatar(
     userId: number,
     image: Upload,
@@ -79,27 +78,36 @@ class UserService {
       signature: this.configService.get('FILES_CLOUD_SIGNATURE'),
       key: this.configService.get('FILES_CLOUD_API_KEY'),
     };
-    const data = await uploadFile(
-      image,
-      `${this.configService.get('FILES_CLOUD_URL')}`,
-      params,
-    );
     const user = await this.getUserById(userId);
-    await this.userRepository.update({ id: userId }, { image: data.url });
-    if (user.image) {
-      await axios.delete(
-        `${this.configService.get(
-          'FILES_CLOUD_REMOVE_FILE_URL',
-        )}${user.image.replace(
-          this.configService.get('FILE_CLOUD_SERVICE_URL'),
-          '',
-        )}`,
+    if (user) {
+      const { mimetype, createReadStream } = await image;
+      const { data } = await axios.post(
+        `${this.configService.get('FILES_CLOUD_URL')}`,
+        createReadStream(),
         {
+          headers: {
+            'Content-Type': mimetype,
+          },
           params,
         },
       );
+      await this.userRepository.update({ id: userId }, { image: data.url });
+      if (user.image) {
+        await axios.delete(
+          `${this.configService.get(
+            'FILES_CLOUD_REMOVE_FILE_URL',
+          )}${user.image.replace(
+            this.configService.get('FILE_CLOUD_SERVICE_URL'),
+            '',
+          )}`,
+          {
+            params,
+          },
+        );
+        return { imageUrl: data.url };
+      }
     }
-    return { imageUrl: data.url };
+    throw new Error('User with this email does not exists');
   }
   async createUser(user: AuthArgs) {
     const existedUser = await this.userRepository.findOneBy({

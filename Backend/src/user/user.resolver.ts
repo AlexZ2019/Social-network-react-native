@@ -77,7 +77,7 @@ class UserResolver {
     try {
       return this.userService.uploadUserAvatar(context.req.user.id, image);
     } catch (e) {
-      throw new Error('Error uploading image');
+      throw new Error(e);
     }
   }
   
