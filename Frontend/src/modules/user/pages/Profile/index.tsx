@@ -1,14 +1,11 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { CURRENT_USER_QUERY } from '../../graphql/queries/currentUser';
 import UserInfo from '../../components/UserInfo';
 import ProfileHeader from '../../components/ProfileHeader';
-import React, { useEffect, useState } from 'react';
-import EditUserForm from '../../components/EditUserForm';
-import { IUserInfo } from '../../../auth/types';
-import { EDIT_USER_MUTATION } from '../../graphql/mutations/editUser';
+import React, { useEffect } from 'react';
 import Posts from '../../../post/components/Posts';
 import CreatePost from '../../../post/components/CreatePost';
-import { ActivityIndicator, Button } from '@ant-design/react-native';
+import { ActivityIndicator } from '@ant-design/react-native';
 import { useRoute } from '@react-navigation/native';
 import { USER_QUERY } from '../../graphql/queries/user';
 
@@ -19,33 +16,11 @@ const Profile = () => {
   // @ts-ignore
   const userId = currentRoute.params?.id;
   const user = userId && data?.getUser || currentUser?.getCurrentUser;
-  const [isEditProfile, setIsEditProfile] = useState<Boolean>(false);
-  const [editUser, { loading }] = useMutation(EDIT_USER_MUTATION);
   useEffect(() => {
     if (userId) {
       fetch({ variables: { id: userId } });
     }
   }, [userId]);
-  
-  const onSubmit = async (data: IUserInfo): Promise<void> => {
-    await editUser({
-      variables: data,
-      update(cache) {
-        const user = cache.readQuery({ query: CURRENT_USER_QUERY });
-        const updatedUser = {
-          getCurrentUser: {
-            ...user.getCurrentUser,
-            ...data,
-            birthday: data.birthday.toISOString().split('T')[0],
-          },
-        };
-        cache.writeQuery({ query: CURRENT_USER_QUERY, data: updatedUser });
-      },
-      onCompleted: () => {
-        setIsEditProfile(false);
-      },
-    });
-  };
   
   if (!currentUser || isUserLoad) {
     return <ActivityIndicator/>;
@@ -56,13 +31,7 @@ const Profile = () => {
                      email={user?.email}
                      image={user?.image}
       />
-      {!userId &&
-        <Button onPress={() => setIsEditProfile(!isEditProfile)}>Edit User
-          Info</Button>}
-      {isEditProfile && !userId
-        ? <EditUserForm user={currentUser.getCurrentUser} onSubmit={onSubmit}
-                        loading={loading}/>
-        : <UserInfo user={user}/>}
+      <UserInfo user={user}/>
       {!data?.getUser && <CreatePost/>}
       <Posts userId={userId}/>
     </>
