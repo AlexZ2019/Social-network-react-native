@@ -82,7 +82,8 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
   
   return (
     <View>
-      <Button onPress={modal.showModal}>{uploadBtnText}</Button>
+      <Button size="small" style={{ width: 90, marginBottom: 5 }}
+              onPress={modal.showModal}>{uploadBtnText}</Button>
       <Modal
         transparent={false}
         visible={modal.isVisible}

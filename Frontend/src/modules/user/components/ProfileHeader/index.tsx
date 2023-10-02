@@ -17,14 +17,10 @@ import {
 const ProfileHeader = ({
   nickname,
   email,
-  serIsEditProfile,
-  isEditProfile,
   image,
   userId,
 }: {
   nickname?: string, email?: string,
-  serIsEditProfile: Dispatch<SetStateAction<Boolean>>,
-  isEditProfile: Boolean,
   image?: string;
   userId?: number;
 }) => {
@@ -47,15 +43,16 @@ const ProfileHeader = ({
         <Image source={image
           ? { uri: `${image}?policy=${FILES_CLOUD_POLICY}&signature=${FILES_CLOUD_SIGNATURE}&key=${FILES_CLOUD_API_KEY}` }
           : require('../../../../assets/user/default-avatar.png')}
-               style={{ width: 45, height: 45, resizeMode: 'contain' }}/>
+               style={{
+                 width: 125,
+                 height: 125,
+                 borderRadius: 100,
+                 marginBottom: 5,
+                 marginTop: 5,
+               }}/>
+        {!userId && <UploadImage upload={upload} loading={loading}
+                                 uploadBtnText="Change Photo"/>}
         <Text>{nickname || email}</Text>
-      </FlexItem>
-      {!userId && <UploadImage upload={upload} loading={loading}
-                               uploadBtnText="Upload avatar"/>}
-      <FlexItem>
-        <Button type="primary" style={{ width: 45, marginLeft: 125 }}
-                size="small"
-                onPress={() => serIsEditProfile(!isEditProfile)}>Edit</Button>
       </FlexItem>
     </Flex>
   );

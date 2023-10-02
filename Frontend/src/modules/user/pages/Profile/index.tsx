@@ -54,8 +54,6 @@ const Profile = () => {
     <>
       <ProfileHeader nickname={user?.nickname}
                      email={user?.email}
-                     serIsEditProfile={setIsEditProfile}
-                     isEditProfile={isEditProfile}
                      image={user?.image}
       />
       {!userId &&
