@@ -34,7 +34,7 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
         allowsEditing: true,
         allowsMultipleSelection: false,
         aspect: [4, 3],
-        quality: 1,
+        quality: 0.2,
       });
       if (assets && !fileExtensionValidation(assets[0].uri, ['jpg', 'jpeg'])) {
         throw new Error('Only jpg and jpeg extensions are allowed');
@@ -56,7 +56,9 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
         alert('You\'ve refused to allow this app to access your camera!');
         return;
       }
-      const result = await ImagePicker.launchCameraAsync();
+      const result = await ImagePicker.launchCameraAsync({
+        quality: 0.2,
+      });
       if (!result.cancelled) {
         setUploadedImage(result.uri);
       }
