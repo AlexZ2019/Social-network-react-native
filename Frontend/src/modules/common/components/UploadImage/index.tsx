@@ -25,6 +25,11 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
   
   const handleChoosePhoto = async () => {
     try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        alert('You\'ve refused to allow this app to access your media!');
+        return;
+      }
       const { assets } = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
         allowsMultipleSelection: false,
@@ -45,15 +50,21 @@ const UploadImage: FC<Props> = ({ upload, loading, uploadBtnText }) => {
   };
   
   const takePhoto = async () => {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-    if (!permissionResult.granted) {
-      alert('You\'ve refused to allow this appp to access your camera!');
-      return;
+    try {
+      const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permissionResult.granted) {
+        alert('You\'ve refused to allow this app to access your camera!');
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync();
+      if (!result.cancelled) {
+        setUploadedImage(result.uri);
+      }
+    } catch (e) {
+      setUploadedImage(null);
+      return false;
     }
-    const result = await ImagePicker.launchCameraAsync();
-    if (!result.cancelled) {
-      setUploadedImage(result.uri);
-    }
+    
   };
   
   const uploadImage = () => {
